@@ -8,6 +8,8 @@ class Aptly(object):
 
     def __init__(self, host, user=None, password=None,
                  verify_ssl=True, timeout=None):
+
+        self.headers = {}
         if user and password:
             self.headers = {'Authorization':
                             'Basic ' + base64.b64encode(user + ':' + password)}
