@@ -1,4 +1,5 @@
 # pyptly
+This library provides a Python interface to the Aptly API
 
 ### Dependencies:
 - python 2.7
