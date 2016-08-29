@@ -1,6 +1,12 @@
 #!/usr/bin/env python
+import uuid
 from setuptools import setup, find_packages
+from pip.req import parse_requirements
 from pyptly import __version__
+
+
+install_reqs = parse_requirements('requirements.txt', session=uuid.uuid1())
+reqs = [str(req.req) for req in install_reqs]
 
 setup(name="pyptly",
       version=__version__,
@@ -9,7 +15,7 @@ setup(name="pyptly",
       author="Nikolai Nozhenko",
       author_email="nik.nozhenko@gmail.com",
       url="http://github.com/repelista/pyaptly",
-      packages=find_packages(exclude=['tests']),
+      packages=find_packages(),
       install_requires=reqs,
       keywords="aptly library",
       classifiers=[
