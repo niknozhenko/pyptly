@@ -43,7 +43,7 @@ class Aptly(object):
 
     def get_local_repos(self):
         """Show list of currently available local repositories.
-        Each repository is returned as in “show” API.
+        Each repository is returned as in "show" API
         """
         request = requests.get("{0}".format(self.api_url['repos']),
                                headers=self.headers, verify=self.verify_ssl)
@@ -112,7 +112,7 @@ class Aptly(object):
 
 
     def delete_local_repo(self, name, **kwargs):
-        """Delete local repository. Local repository can’t be deleted
+        """Delete local repository. Local repository can't be deleted
         if it is published. If local repository has snapshots, aptly
         would refuse to delete it by default, but that can be overridden
         with force flag
@@ -142,7 +142,7 @@ class Aptly(object):
         :param name: name of the local repository
         :param dir: directory with uploaded packages to import
         :param file: file to import
-        :param no_rm: when value is set to True, don’t remove any file
+        :param no_rm: when value is set to True, don't remove any file
         :param force_repl: when value is set to True, remove packages 
         conflicting with package being added (in local repository)
         """
@@ -169,7 +169,7 @@ class Aptly(object):
         importing, copying, moving packages around.
 
         API verifies that packages actually exist in aptly database and 
-        checks constraint that conflicting packages can’t be part of the 
+        checks constraint that conflicting packages can't be part of the 
         same local repository.
 
         :param name: name of the local repository
@@ -262,7 +262,7 @@ class Aptly(object):
 
     def upload_files(self, dir, files):
         """Parameter :dir is upload directory name. Directory would be created
-        if it doesn’t exist.
+        if it doesn't exist.
 
         Any number of files can be uploaded in one call, aptly would preserve
         filenames. No check is performed if existing uploaded would be 
@@ -394,7 +394,7 @@ class Aptly(object):
 
 
     def update_snapshot(self, snap_name, **kwargs):
-        """Update snapshot’s description or name"""
+        """Update snapshot's description or name"""
         data = {}
         if kwargs:
             data.update(kwargs)
@@ -415,7 +415,7 @@ class Aptly(object):
 
 
     def delete_snapshot(self, snap_name, **kwargs):
-        """Delete snapshot. Snapshot can’t be deleted if it is published.
+        """Delete snapshot. Snapshot can't be deleted if it is published.
         Aptly would refuse to delete snapshot if it has been used as source
         to create other snapshots, but that could be overridden with force 
         parameter.
