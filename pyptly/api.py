@@ -1,7 +1,7 @@
 import requests
 import json
 import base64
-from pyptly.utils import prefix_sanitized
+from pyptly.utils import prefix_sanitized, response
 
 class Aptly(object):
     """Aptly class"""
@@ -31,23 +31,13 @@ class Aptly(object):
         self.timeout = timeout
 
 
-    def _respone(self, request, meta_msg=None):
-        meta_msg = meta_msg if meta_msg else u'Operation aborted'
-        try:
-            msg = request.json()
-        except ValueError:
-            msg = [{u'meta': meta_msg,
-                    u'error': u'response code - {0}'.format(request.status_code)}]
-        return msg
-
-
     def get_local_repos(self):
         """Show list of currently available local repositories.
         Each repository is returned as in "show" API
         """
         request = requests.get("{0}".format(self.api_url['repos']),
                                headers=self.headers, verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def create_local_repo(self, name, **kwargs):
@@ -66,7 +56,7 @@ class Aptly(object):
         request = requests.post("{0}".format(self.api_url['repos']),
                                 data=json.dumps(data), headers=headers,
                                 verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def show_local_repo(self, name):
@@ -75,7 +65,7 @@ class Aptly(object):
         """
         request = requests.get("{0}/{1}".format(self.api_url['repos'], name),
                                headers=self.headers, verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def show_repo_packages(self, name, **kwargs):
@@ -89,7 +79,7 @@ class Aptly(object):
         request = requests.get("{0}/{1}/packages".format(
                                self.api_url['repos'], name), params=params, 
                                headers=self.headers, verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def edit_local_repo(self, name, **kwargs):
@@ -108,7 +98,7 @@ class Aptly(object):
         request = requests.put('{0}/{1}'.format(self.api_url['repos'], name),
                                data=json.dumps(data), headers=headers,
                                verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def delete_local_repo(self, name, **kwargs):
@@ -129,7 +119,7 @@ class Aptly(object):
                                   headers=self.headers,
                                   verify=self.verify_ssl,
                                   params=params)
-        return self._respone(request)
+        return response(request)
 
 
     def add_uploaded_pkg(self, name, dirname, **kwargs):
@@ -157,7 +147,7 @@ class Aptly(object):
                                 filename if filename else ''),
                                 headers=self.headers, verify=self.verify_ssl,
                                 params=params)
-        return self._respone(request)
+        return response(request)
 
 
     def add_pkg_bykey(self, name, **kwargs):
@@ -184,7 +174,7 @@ class Aptly(object):
                                 self.api_url['repos'], name),
                                 data=json.dumps(data), headers=headers,
                                 verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def delete_pkg_bykey(self, name, **kwargs):
@@ -206,7 +196,7 @@ class Aptly(object):
                                   self.api_url['repos'], name),
                                   data=json.dumps(data), headers=headers,
                                   verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def show_pkg_bykey(self, key):
@@ -218,14 +208,14 @@ class Aptly(object):
         request = requests.get('{0}/{1}'.format(self.api_url['packages'], 
                                name), headers=self.headers,
                                verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def get_dirs(self):
         """List all directories"""
         request = requests.get('{0}'.format(self.api_url['files']),
                                headers=self.headers, verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def get_files(self, dir):
@@ -235,7 +225,7 @@ class Aptly(object):
         """
         request = requests.get('{0}/{1}'.format(self.api_url['files'], dir),
                                headers=self.headers, verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def delete_dir(self, dir):
@@ -245,7 +235,7 @@ class Aptly(object):
         """
         request = requests.delete('{0}/{1}'.format(self.api_url['files'], dir),
                                   headers=self.headers, verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def delete_file(self, dir, file):
@@ -257,7 +247,7 @@ class Aptly(object):
         request = requests.delete('{0}/{1}/{2}'.format(self.api_url['files'],
                                   dir, file), headers=self.headers,
                                   verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def upload_files(self, dir, files):
@@ -279,14 +269,14 @@ class Aptly(object):
         request = requests.post('{0}/{1}'.format(self.api_url['files'], dir),
                                 files=files,headers=self.headers,
                                 verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def get_publish(self):
         """List published repositories"""
         request = requests.get('{0}'.format(self.api_url['publish']),
                                headers=self.headers, verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def publish(self, **kwargs):
@@ -302,7 +292,7 @@ class Aptly(object):
         request = requests.post('{0}/{1}'.format(self.api_url['publish'],
                                 prefix if prefix else ''), headers=headers,
                                 data=json.dumps(data), verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def update_publish(self, distr, **kwargs):
@@ -325,7 +315,7 @@ class Aptly(object):
                                prefix if prefix else '', distr),
                                headers=headers, verify=self.verify_ssl,
                                data=json.dumps(data))
-        return self._respone(request)
+        return response(request)
 
 
     def delete_publish(self, distr, **kwargs):
@@ -344,7 +334,7 @@ class Aptly(object):
                                   prefix if prefix else '', distr),
                                   params=params, headers=self.headers,
                                   verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def get_snapshots(self, **kwargs):
@@ -356,7 +346,7 @@ class Aptly(object):
         request = requests.get('{0}'.format(self.api_url['snapshots']),
                                headers=self.headers, params=params,
                                verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def create_snapshot_from_repo(self, rep_name, **kwargs):
@@ -372,7 +362,7 @@ class Aptly(object):
                                 self.api_url['repos'], rep_name),
                                 headers=headers, verify=self.verify_ssl,
                                 data=json.dumps(data))
-        return self._respone(request) 
+        return response(request) 
 
 
     def create_snapshot_from_pkg(self, **kwargs):
@@ -390,7 +380,7 @@ class Aptly(object):
         request = requests.post('{0}'.format(self.api_url['snapshots']),
                                 headers=headers, verify=self.verify_ssl,
                                 data=json.dumps(kwargs))
-        return self._respone(request)
+        return response(request)
 
 
     def update_snapshot(self, snap_name, **kwargs):
@@ -403,7 +393,7 @@ class Aptly(object):
         request = requests.put('{0}/{1}'.format(self.api_url['snapshots'],
                                snap_name), headers=headers,
                                verify=self.verify_ssl, data=json.dumps(data))
-        return self._respone(request)
+        return response(request)
 
 
     def show_snapshot(self, snap_name):
@@ -411,7 +401,7 @@ class Aptly(object):
         request = requests.get('{0}/{1}'.format(self.api_url['snapshots'],
                                snap_name), headers=headers,
                                verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def delete_snapshot(self, snap_name, **kwargs):
@@ -427,7 +417,7 @@ class Aptly(object):
         request = requests.get('{0}/{1}'.format(self.api_url['snapshots'],
                                snap_name), headers=headers, params=params,
                                verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def show_snapshot_packages(self, snap_name, **kwargs):
@@ -442,7 +432,7 @@ class Aptly(object):
                                self.api_url['snapshots'], snap_name),
                                params=params, headers=self.headers,
                                verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def snapshots_diff(self, snapshot1, snapshot2):
@@ -453,14 +443,14 @@ class Aptly(object):
                                self.api_url['snapshots'], snapshot1,
                                snapshot2), headers=self.headers,
                                verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
 
 
     def aptly_version(self):
         """Return current aptly version"""
         request = requests.get('{0}/version'.format(self.api), 
                                headers=self.headers, verify=self.verify_ssl)
-        return self._respone(request) 
+        return response(request) 
 
 
     def get_graph(self, ext='png'):
@@ -469,4 +459,4 @@ class Aptly(object):
         """
         request = requests.get('{0}/graph.{1}'.format(self.api, ext),
                                headers=self.headers, verify=self.verify_ssl)
-        return self._respone(request)
+        return response(request)
