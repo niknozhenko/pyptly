@@ -2,6 +2,7 @@
 __pycache__
 .tox
 dist/
+build/
 *.egg
 *.egg-info
 *.pyc
