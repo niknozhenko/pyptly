@@ -1,0 +1,8 @@
+*.py[cod]
+__pycache__
+.tox
+dist/
+*.egg
+*.egg-info
+*.pyc
+*.swp
