@@ -11,6 +11,6 @@ From PyPI:
     pip install pyptly
 
 Or you may use git to clone the repository from
-Github and install it manually::
+Github and install it manually:
 
      python setup.py install
