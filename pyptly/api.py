@@ -6,13 +6,11 @@ from pyptly.utils import prefix_sanitized, response
 class Aptly(object):
     """Aptly class"""
 
-    def __init__(self, host, user=None, password=None,
-                 verify_ssl=True, timeout=None):
-
+    def __init__(self, host, user=None, password=None, verify_ssl=True):
         self.headers = {}
         if user and password:
-            self.headers = {'Authorization':
-                            'Basic ' + base64.b64encode(user + ':' + password)}
+            self.headers['Authorization'] = 'Basic ' + base64.b64encode(
+                                                user + ':' + password)
         if not host:
             raise ValueError('host argument may not be empty')
         self.host = host.rstrip('/')
@@ -22,15 +20,12 @@ class Aptly(object):
             self.host = 'https://' + self.host
 
         self.api = self.host + "/api"
-        self.api_url = {
-                        'repos': self.api + '/repos',
+        self.api_url = {'repos': self.api + '/repos',
                         'snapshots': self.api + '/snapshots',
                         'publish': self.api + '/publish',
                         'files': self.api + '/files',
-                        'packages': self.api + '/packages'
-                       }
+                        'packages': self.api + '/packages'}
         self.verify_ssl = verify_ssl
-        self.timeout = timeout
 
 
     def get_local_repos(self):
@@ -47,8 +42,10 @@ class Aptly(object):
 
         :param name: name of the new local repository
         :param comment: text describing local repository, for the user
-        :param distr: default distribution when publishing from this local repo
-        :param component: default component when publishing from this local repo
+        :param distr: default distribution when publishing from this 
+        local repo
+        :param component: default component when publishing from this
+        local repo
         """
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
         data = {'Name': name}
@@ -71,7 +68,7 @@ class Aptly(object):
 
 
     def show_repo_packages(self, name, **kwargs):
-        """List all packages in local repository or perform search on 
+        """List all packages in local repository or perform search on
         repository contents and return result
         """
         params = {}
@@ -89,8 +86,10 @@ class Aptly(object):
 
         :param name: name of the new local repository
         :param comment: text describing local repository, for the user
-        :param distr: default distribution when publishing from this local repo
-        :param component: default component when publishing from this local repo
+        :param distr: default distribution when publishing from this
+        local repo
+        :param component: default component when publishing from this
+        local repo
         """
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
         data = {}
@@ -109,8 +108,8 @@ class Aptly(object):
         would refuse to delete it by default, but that can be overridden
         with force flag
 
-        :param force: when value is set to True, delete local repository even
-        if it has snapshots
+        :param force: when value is set to True, delete local repository
+        even if it has snapshots
         """
         params = {}
         if kwargs:
@@ -125,14 +124,16 @@ class Aptly(object):
 
 
     def add_uploaded_pkg(self, name, dirname, **kwargs):
-        """Import packages from files to the local repository. If directory
-        specified, aptly would discover package files automatically.
-        Adding same package to local repository is not an error.
-        By default aptly would try to remove every successfully processed file
-        and directory :dir (if it becomes empty after import).
+        """Import packages from files to the local repository. If
+        directory specified, aptly would discover package files
+        automatically. Adding same package to local repository is
+        not an error.
+        By default aptly would try to remove every successfully
+        processed file and directory :dir (if it becomes empty
+        after import).
 
         :param name: name of the local repository
-        :param dir: directory with uploaded packages to import
+        :param dirname: directory with uploaded packages to import
         :param file: file to import
         :param no_rm: when value is set to True, don't remove any file
         :param force_repl: when value is set to True, remove packages 
@@ -155,13 +156,13 @@ class Aptly(object):
     def add_pkg_bykey(self, name, **kwargs):
         """Add packages to local repository by package keys.
 
-        Any package could be added, it should be part of aptly database (it
-        could come from any mirror, snapshot, other local repository). This 
-        API combined with package list (search) APIs allows to implement 
-        importing, copying, moving packages around.
+        Any package could be added, it should be part of aptly database
+        (it could come from any mirror, snapshot, other local
+        repository). This API combined with package list (search) APIs
+        allows to implement importing, copying, moving packages around.
 
         API verifies that packages actually exist in aptly database and 
-        checks constraint that conflicting packages can't be part of the 
+        checks constraint that conflicting packages can't be part of the
         same local repository.
 
         :param name: name of the local repository
@@ -182,8 +183,8 @@ class Aptly(object):
     def delete_pkg_bykey(self, name, **kwargs):
         """Remove packages from local repository by package keys.
 
-        Any package(s) could be removed from local repository. List package
-        references in local repository could be retrieved with 
+        Any package(s) could be removed from local repository. List
+        package references in local repository could be retrieved with
         show_repo_packages
 
         :param name: name of the local repository
@@ -203,7 +204,8 @@ class Aptly(object):
 
     def show_pkg_bykey(self, key):
         """Show information about package by package key.
-        Package keys could be obtained from various GET .../packages APIs.
+        Package keys could be obtained from various
+        GET .../packages APIs.
 
         :param key: package key
         """
@@ -253,12 +255,12 @@ class Aptly(object):
 
 
     def upload_files(self, dir, files):
-        """Parameter :dir is upload directory name. Directory would be created
-        if it doesn't exist.
+        """Parameter :dir is upload directory name. Directory would be
+        created if it doesn't exist.
 
-        Any number of files can be uploaded in one call, aptly would preserve
-        filenames. No check is performed if existing uploaded would be 
-        overwritten.
+        Any number of files can be uploaded in one call, aptly would
+        preserve filenames. No check is performed if existing uploaded
+        would be overwritten.
 
         :param dir: upload directory name
         :param files: files to upload. Single file path or list of pathes.
@@ -301,8 +303,8 @@ class Aptly(object):
         """API action depends on published repository contents:
         * if local repository has been published, published repository
         would be updated to match local repository contents
-        * if snapshots have been been published, it is possible to switch
-        each component to new snapshot
+        * if snapshots have been been published, it is possible to
+        switch each component to new snapshot
         """
         prefix = kwargs.pop('prefix', None)
         if prefix:
@@ -321,7 +323,8 @@ class Aptly(object):
 
 
     def delete_publish(self, distr, **kwargs):
-        """Delete published repository, clean up files in published directory
+        """Delete published repository, clean up files in published
+        directory
         """
         prefix = kwargs.pop('prefix', None)
         if prefix:
@@ -352,8 +355,8 @@ class Aptly(object):
 
 
     def create_snapshot_from_repo(self, rep_name, **kwargs):
-        """Create snapshot of current local repository :name contents as new
-        snapshot with name :snapname
+        """Create snapshot of current local repository :name contents
+        as new snapshot with name :snapname
         """
         data = {}
         if kwargs:
@@ -407,10 +410,10 @@ class Aptly(object):
 
 
     def delete_snapshot(self, snap_name, **kwargs):
-        """Delete snapshot. Snapshot can't be deleted if it is published.
-        Aptly would refuse to delete snapshot if it has been used as source
-        to create other snapshots, but that could be overridden with force 
-        parameter.
+        """Delete snapshot. Snapshot can't be deleted if it is 
+        published. Aptly would refuse to delete snapshot if it has
+        been used as source to create other snapshots, but that could
+        be overridden with force parameter.
         """
         params = {}
         if kwargs:
@@ -438,8 +441,8 @@ class Aptly(object):
 
 
     def snapshots_diff(self, snapshot1, snapshot2):
-        """Calculate difference between two snapshots :snapshot1 (left) and
-        :snapshot2 (right).
+        """Calculate difference between two snapshots :snapshot1 (left)
+        and :snapshot2 (right).
         """
         request = requests.get("{0}/{1}/diff/{2}".format(
                                self.api_url['snapshots'], snapshot1,
@@ -456,7 +459,8 @@ class Aptly(object):
 
 
     def get_graph(self, ext='png'):
-        """Generate graph of aptly objects (same as in aptly graph command).
+        """Generate graph of aptly objects (same as in aptly graph
+        command).
         :param ext: specifies desired file extension, e.g. .png, .svg.
         """
         request = requests.get('{0}/graph.{1}'.format(self.api, ext),
