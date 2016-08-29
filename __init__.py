@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-python-aptlyapi, python wrapper for the Aptly API
+aptlyapi, python wrapper for the Aptly API
 """
 
 import requests
@@ -55,7 +55,7 @@ class Aptly(object):
         return self._respone(request)
 
 
-    def create_local_repo(self, name, distr='', component='', comment=''):
+    def create_local_repo(self, name, **kwargs):
         """Create empty local repository with specified parameters
 
         :param name: name of the new local repository
@@ -64,8 +64,9 @@ class Aptly(object):
         :param component: default component when publishing from this local repo
         """
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
-        data = {'Name': name, 'Comment': comment,
-                'DefaultDistribution': distr, 'DefaultComponent': component}
+        data = {'Name': name}
+        if kwargs:
+            data.update(kwargs)
     
         request = requests.post("{0}".format(self.api_url['repos']),
                                 data=json.dumps(data), headers=headers,
@@ -82,18 +83,13 @@ class Aptly(object):
         return self._respone(request)
 
 
-    def show_repo_packages(self, name, query=None,
-                           with_deps=False, details=False):
+    def show_repo_packages(self, name, **kwargs):
         """List all packages in local repository or perform search on 
         repository contents and return result
         """
         params = {}
-        if query:
-            params['q'] = query
-        if with_deps:
-             params['withDeps'] = int(with_deps)
-        if details:
-            params['format'] = 'details'
+        if kwargs:
+            params.update(kwargs)
 
         request = requests.get("{0}/{1}/packages".format(
                                self.api_url['repos'], name), params=params, 
@@ -101,7 +97,7 @@ class Aptly(object):
         return self._respone(request)
 
 
-    def edit_local_repo(self, name, distr='', component='', comment=''):
+    def edit_local_repo(self, name, **kwargs):
         """Update local repository meta information
 
         :param name: name of the new local repository
@@ -111,12 +107,8 @@ class Aptly(object):
         """
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
         data = {}
-        if distr:
-            data['DefaultDistribution'] = distr
-        if component:
-            data['DefaultComponent'] = component
-        if comment:
-            data['Comment'] = comment
+        if kwargs:
+            data.update(kwargs)
 
         request = requests.put('{0}/{1}'.format(self.api_url['repos'], name),
                                data=json.dumps(data), headers=headers,
@@ -124,7 +116,7 @@ class Aptly(object):
         return self._respone(request)
 
 
-    def delete_local_repo(self, name, force=False):
+    def delete_local_repo(self, name, **kwargs):
         """Delete local repository. Local repository can’t be deleted
         if it is published. If local repository has snapshots, aptly
         would refuse to delete it by default, but that can be overridden
@@ -133,19 +125,19 @@ class Aptly(object):
         :param force: when value is set to True, delete local repository even
         if it has snapshots
         """
-        if not isinstance(force, bool):
-            raise TypeError('force is not a boolean')
+        params = {}
+        if kwargs:
+            params.update(kwargs)
 
         request = requests.delete('{0}/{1}'.format(
                                   self.api_url['repos'], name),
                                   headers=self.headers,
                                   verify=self.verify_ssl,
-                                  params={'force': int(force)})
+                                  params=params)
         return self._respone(request)
 
 
-    def add_uploaded_pkg(self, name, dir, file=None, no_rm=False,
-                         force_repl=False):
+    def add_uploaded_pkg(self, name, dirname, **kwargs):
         """Import packages from files to the local repository. If directory
         specified, aptly would discover package files automatically.
         Adding same package to local repository is not an error.
@@ -159,16 +151,21 @@ class Aptly(object):
         :param force_repl: when value is set to True, remove packages 
         conflicting with package being added (in local repository)
         """
+
+        filename = kwargs.pop('file', None)
+        params = {}
+        if kwargs:
+            params.update(kwargs)
+
         request = requests.post('{0}/{1}/{2}/{3}'.format(
-                                self.api_url['repos'], name, dir,
-                                file if file else ''), headers=self.headers,
-                                verify=self.verify_ssl,
-                                params={'noRemove': int(no_rm),
-                                        'forceReplace': int(force_repl)})
+                                self.api_url['repos'], name, dirname,
+                                filename if filename else ''),
+                                headers=self.headers, verify=self.verify_ssl,
+                                params=params)
         return self._respone(request)
 
 
-    def add_pkg_bykey(self, name, pkg_ref):
+    def add_pkg_bykey(self, name, **kwargs):
         """Add packages to local repository by package keys.
 
         Any package could be added, it should be part of aptly database (it
@@ -184,7 +181,10 @@ class Aptly(object):
         :param pkg_ref: list of package references (package keys)
         """
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
-        data = {'PackageRefs': pkg_ref}
+        data = {}
+        if kwargs:
+            data.update(kwargs)
+
         request = requests.post('{0}/{1}/packages'.format(
                                 self.api_url['repos'], name),
                                 data=json.dumps(data), headers=headers,
@@ -192,7 +192,7 @@ class Aptly(object):
         return self._respone(request)
 
 
-    def delete_pkg_bykey(self, name, pkg_ref):
+    def delete_pkg_bykey(self, name, **kwargs):
         """Remove packages from local repository by package keys.
 
         Any package(s) could be removed from local repository. List package
@@ -203,7 +203,10 @@ class Aptly(object):
         :param pkg_ref: list of package references (package keys)
         """
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
-        data = {'PackageRefs': pkg_ref}
+        data = {}
+        if kwargs:
+            data.update(kwargs)
+
         request = requests.delete('{0}/{1}/packages'.format(
                                   self.api_url['repos'], name),
                                   data=json.dumps(data), headers=headers,
@@ -291,25 +294,15 @@ class Aptly(object):
         return self._respone(request)
 
 
-    def publish(self, src_kind, sources, distr=None, label=None, prefix=None,
-                origin=None, force_overwrite=False, arch=None, signing=None):
+    def publish(self, **kwargs):
         """Publish local repository or snapshot under specified prefix.
         Storage might be passed in prefix as well, e.g. s3:packages/.
         """
+        prefix = kwargs.pop('prefix', None)
         if prefix:
             prefix = prefix_sanitized(prefix)
-        data = {'SourceKind': src_kind, 'Sources': sources,
-                'ForceOverwrite': force_overwrite}
-        if distr:
-            data['Distribution'] = distr
-        if label:
-            data['Label'] = label
-        if origin:
-            data['Origin'] = origin
-        if arch:
-            data['Architectures'] = arch
-        if signing:
-            data['Signing'] = signing
+
+        data = kwargs
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
         request = requests.post('{0}/{1}'.format(self.api_url['publish'],
                                 prefix if prefix else ''), headers=headers,
@@ -317,21 +310,21 @@ class Aptly(object):
         return self._respone(request)
 
 
-    def update_publish(self, distr, prefix=None, snapshots=None,
-                       force_overwrite=False, signing=None):
+    def update_publish(self, distr, **kwargs):
         """API action depends on published repository contents:
         * if local repository has been published, published repository
         would be updated to match local repository contents
         * if snapshots have been been published, it is possible to switch
         each component to new snapshot
         """
+        prefix = kwargs.pop('prefix', None)
         if prefix:
             prefix = prefix_sanitized(prefix)
-        data = {'ForceOverwrite': force_overwrite}
-        if snapshots:
-            data['Snapshots'] = snapshots
-        if signing:
-            data['Signing'] = signing
+
+        data = {}
+        if kwargs:
+            data.update(kwargs)
+
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
         request = requests.put('{0}/{1}/{2}'.format(self.api_url['publish'],
                                prefix if prefix else '', distr),
@@ -340,12 +333,17 @@ class Aptly(object):
         return self._respone(request)
 
 
-    def delete_publish(self, distr, prefix=None, force=False):
+    def delete_publish(self, distr, **kwargs):
         """Delete published repository, clean up files in published directory
         """
+        prefix = kwargs.pop('prefix', None)
         if prefix:
             prefix = prefix_sanitized(prefix)
-        params = {'force': int(force)}
+
+        params = {}
+        if kwargs:
+            params.update(kwargs)
+
         request = requests.delete('{0}/{1}/{2}'.format(
                                   self.api_url['publish'],
                                   prefix if prefix else '', distr),
@@ -354,22 +352,26 @@ class Aptly(object):
         return self._respone(request)
 
 
-    def get_snapshots(self, sort='name'):
+    def get_snapshots(self, **kwargs):
         """eturn list of all snapshots created in the system"""
-        params = {'sort': sort}
+        params = {}
+        if kwargs:
+            params.update(kwargs)
+
         request = requests.get('{0}'.format(self.api_url['snapshots']),
                                headers=self.headers, params=params,
                                verify=self.verify_ssl)
         return self._respone(request)
 
 
-    def create_snapshot_from_repo(self, rep_name, snap_name, description=None):
+    def create_snapshot_from_repo(self, rep_name, **kwargs):
         """Create snapshot of current local repository :name contents as new
         snapshot with name :snapname
         """
-        data = {'Name': snap_name}
-        if description:
-            data['Description'] = description
+        data = {}
+        if kwargs:
+            data.update(kwargs)
+
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
         request = requests.post('{0}/{1}/snapshots'.format(
                                 self.api_url['repos'], rep_name),
@@ -378,35 +380,30 @@ class Aptly(object):
         return self._respone(request) 
 
 
-    def create_snapshot_from_pkg(self, snap_name, description=None,
-                                 src_snaps=None, pkg_refs=None):
+    def create_snapshot_from_pkg(self, **kwargs):
         """Create snapshot from list of package references.
 
         This API creates snapshot out of any list of package references.
         Package references could be obtained from other snapshots, local
         repos or mirrors.
         """
-        data = {'Name': snap_name}
-        if description:
-            data['Description'] = description
-        if src_snaps:
-            data['SourceSnapshots'] = src_snaps
-        if pkg_refs:
-            data['PackageRefs'] = pkg_refs
+        data = {}
+        if kwargs:
+            data.update(kwargs)
+
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
         request = requests.post('{0}'.format(self.api_url['snapshots']),
                                 headers=headers, verify=self.verify_ssl,
-                                data=json.dumps(data))
+                                data=json.dumps(kwargs))
         return self._respone(request)
 
 
-    def update_snapshot(self, snap_name, new_name=None, description=None):
+    def update_snapshot(self, snap_name, **kwargs):
         """Update snapshot’s description or name"""
         data = {}
-        if new_name:
-            data['Name'] = new_name
-        if description:
-            data['Description'] = description
+        if kwargs:
+            data.update(kwargs)
+
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
         request = requests.put('{0}/{1}'.format(self.api_url['snapshots'],
                                snap_name), headers=headers,
@@ -422,31 +419,30 @@ class Aptly(object):
         return self._respone(request)
 
 
-    def delete_snapshot(self, snap_name, force=False):
+    def delete_snapshot(self, snap_name, **kwargs):
         """Delete snapshot. Snapshot can’t be deleted if it is published.
         Aptly would refuse to delete snapshot if it has been used as source
         to create other snapshots, but that could be overridden with force 
         parameter.
         """
-        params = {'force': int(force)}
+        params = {}
+        if kwargs:
+            params.update(kwargs)
+
         request = requests.get('{0}/{1}'.format(self.api_url['snapshots'],
                                snap_name), headers=headers, params=params,
                                verify=self.verify_ssl)
         return self._respone(request)
 
 
-    def show_snapshot_packages(self, snap_name, query=None,
-                               with_deps=False, details=False):
+    def show_snapshot_packages(self, snap_name, **kwargs):
         """List all packages in snapshot or perform search on snapshot
         contents and return result.
         """
         params = {}
-        if query:
-            params['q'] = query
-        if with_deps:
-             params['withDeps'] = int(with_deps)
-        if details:
-            params['format'] = 'details'
+        if kwargs:
+            params.update(kwargs)
+
         request = requests.get("{0}/{1}/packages".format(
                                self.api_url['snapshots'], snap_name),
                                params=params, headers=self.headers,
