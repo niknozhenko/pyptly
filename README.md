@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/repelista/pyptly.svg?branch=master)](https://travis-ci.org/repelista/pyptly)
+[![Coverage Status](https://coveralls.io/repos/github/repelista/pyptly/badge.svg)](https://coveralls.io/github/repelista/pyptly)
 
 # pyptly
 This library provides a Python interface to the Aptly API
