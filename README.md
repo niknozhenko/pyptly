@@ -1,8 +1,9 @@
+[![Build Status](https://travis-ci.org/repelista/pyptly.svg?branch=master)](https://travis-ci.org/repelista/pyptly)
+
 # pyptly
 This library provides a Python interface to the Aptly API
 
 ### Dependencies:
-- python 2.7
 - requests >= 2.4.3
 
 ### Installation:
