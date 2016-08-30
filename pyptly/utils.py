@@ -18,6 +18,6 @@ def response(request, meta_msg=None):
     try:
         msg = request.json()
     except ValueError:
-        msg = [{u'meta': meta_msg,
-                u'error': u'response code - {0}'.format(request.status_code)}]
+        msg = {u'meta': meta_msg,
+               u'error': u'response code - {0}'.format(request.status_code)}
     return msg
