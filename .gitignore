@@ -1,8 +1,10 @@
 *.py[cod]
 __pycache__
+.coverage
 .tox
-dist/
 build/
+dist/
+htmlcov/
 *.egg
 *.egg-info
 *.pyc
