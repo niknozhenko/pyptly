@@ -1,6 +1,6 @@
-import base64
 import json
 import requests
+from base64 import b64encode
 from pyptly.utils import prefix_sanitized, response
 
 class Aptly(object):
@@ -9,8 +9,8 @@ class Aptly(object):
     def __init__(self, host, user=None, password=None, verify_ssl=True):
         self.headers = {}
         if user and password:
-            self.headers['Authorization'] = 'Basic ' + base64.b64encode(
-                                                user + ':' + password)
+            self.headers['Authorization'] = 'Basic ' + b64encode(user + ':'
+                                                                 + password)
         if not host:
             raise ValueError('host argument may not be empty')
         self.host = host.rstrip('/')
@@ -42,7 +42,7 @@ class Aptly(object):
 
         :param name: name of the new local repository
         :param comment: text describing local repository, for the user
-        :param distr: default distribution when publishing from this 
+        :param distr: default distribution when publishing from this
         local repo
         :param component: default component when publishing from this
         local repo
@@ -51,7 +51,7 @@ class Aptly(object):
         data = {'Name': name}
         if kwargs:
             data.update(kwargs)
-    
+
         request = requests.post("{0}".format(self.api_url['repos']),
                                 data=json.dumps(data), headers=headers,
                                 verify=self.verify_ssl)
@@ -75,9 +75,10 @@ class Aptly(object):
         if kwargs:
             params.update(kwargs)
 
-        request = requests.get("{0}/{1}/packages".format(
-                               self.api_url['repos'], name), params=params, 
-                               headers=self.headers, verify=self.verify_ssl)
+        request = requests.get('{0}/{1}/packages'.format(self.api_url['repos'],
+                                                         name),
+                               params=params, headers=self.headers,
+                               verify=self.verify_ssl)
         return response(request)
 
 
@@ -115,8 +116,8 @@ class Aptly(object):
         if kwargs:
             params.update(kwargs)
 
-        request = requests.delete('{0}/{1}'.format(
-                                  self.api_url['repos'], name),
+        request = requests.delete('{0}/{1}'.format(self.api_url['repos'],
+                                                   name),
                                   headers=self.headers,
                                   verify=self.verify_ssl,
                                   params=params)
@@ -136,7 +137,7 @@ class Aptly(object):
         :param dirname: directory with uploaded packages to import
         :param file: file to import
         :param no_rm: when value is set to True, don't remove any file
-        :param force_repl: when value is set to True, remove packages 
+        :param force_repl: when value is set to True, remove packages
         conflicting with package being added (in local repository)
         """
 
@@ -145,9 +146,10 @@ class Aptly(object):
         if kwargs:
             params.update(kwargs)
 
-        request = requests.post('{0}/{1}/{2}/{3}'.format(
-                                self.api_url['repos'], name, dirname,
-                                filename if filename else ''),
+        request = requests.post('{0}/{1}/{2}/{3}'.format(self.api_url['repos'],
+                                                         name, dirname,
+                                                         filename if filename
+                                                         else ''),
                                 headers=self.headers, verify=self.verify_ssl,
                                 params=params)
         return response(request)
@@ -161,7 +163,7 @@ class Aptly(object):
         repository). This API combined with package list (search) APIs
         allows to implement importing, copying, moving packages around.
 
-        API verifies that packages actually exist in aptly database and 
+        API verifies that packages actually exist in aptly database and
         checks constraint that conflicting packages can't be part of the
         same local repository.
 
@@ -173,8 +175,8 @@ class Aptly(object):
         if kwargs:
             data.update(kwargs)
 
-        request = requests.post('{0}/{1}/packages'.format(
-                                self.api_url['repos'], name),
+        request = requests.post('{0}/{1}/packages'.format(self.api_url['repos'],
+                                                          name),
                                 data=json.dumps(data), headers=headers,
                                 verify=self.verify_ssl)
         return response(request)
@@ -209,8 +211,9 @@ class Aptly(object):
 
         :param key: package key
         """
-        request = requests.get('{0}/{1}'.format(self.api_url['packages'], 
-                               key), headers=self.headers,
+        request = requests.get('{0}/{1}'.format(self.api_url['packages'],
+                                                key),
+                               headers=self.headers,
                                verify=self.verify_ssl)
         return response(request)
 
@@ -222,39 +225,44 @@ class Aptly(object):
         return response(request)
 
 
-    def get_files(self, dir):
+    def get_files(self, dirname):
         """Returns list of files in directory
 
         :param dir: directory name to inspect
         """
-        request = requests.get('{0}/{1}'.format(self.api_url['files'], dir),
-                               headers=self.headers, verify=self.verify_ssl)
+        request = requests.get('{0}/{1}'.format(self.api_url['files'],
+                                                dirname),
+                               headers=self.headers,
+                               verify=self.verify_ssl)
         return response(request)
 
 
-    def delete_dir(self, dir):
+    def delete_dir(self, dirname):
         """Deletes all files in upload directory and directory itself
 
         :param dir: directory name to delete
         """
-        request = requests.delete('{0}/{1}'.format(self.api_url['files'], dir),
-                                  headers=self.headers, verify=self.verify_ssl)
+        request = requests.delete('{0}/{1}'.format(self.api_url['files'],
+                                                   dirname),
+                                  headers=self.headers,
+                                  verify=self.verify_ssl)
         return response(request)
 
 
-    def delete_file(self, dir, file):
+    def delete_file(self, dirname, filename):
         """Delete single file in directory
 
         :param dir: directory to delete from
         :param file: file to delete
         """
         request = requests.delete('{0}/{1}/{2}'.format(self.api_url['files'],
-                                  dir, file), headers=self.headers,
+                                                       dirname, filename),
+                                  headers=self.headers,
                                   verify=self.verify_ssl)
         return response(request)
 
 
-    def upload_files(self, dir, files):
+    def upload_files(self, dirname, files):
         """Parameter :dir is upload directory name. Directory would be
         created if it doesn't exist.
 
@@ -270,8 +278,9 @@ class Aptly(object):
         else:
             files = ('file', open(files, 'rb'))
 
-        request = requests.post('{0}/{1}'.format(self.api_url['files'], dir),
-                                files=files,headers=self.headers,
+        request = requests.post('{0}/{1}'.format(self.api_url['files'],
+                                                 dirname),
+                                files=files, headers=self.headers,
                                 verify=self.verify_ssl)
         return response(request)
 
@@ -294,8 +303,9 @@ class Aptly(object):
         data = kwargs
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
         request = requests.post('{0}/{1}'.format(self.api_url['publish'],
-                                prefix if prefix else ''), headers=headers,
-                                data=json.dumps(data), verify=self.verify_ssl)
+                                                 prefix if prefix else ''),
+                                headers=headers, data=json.dumps(data),
+                                verify=self.verify_ssl)
         return response(request)
 
 
@@ -316,7 +326,8 @@ class Aptly(object):
 
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
         request = requests.put('{0}/{1}/{2}'.format(self.api_url['publish'],
-                               prefix if prefix else '', distr),
+                                                    prefix if prefix else '',
+                                                    distr),
                                headers=headers, verify=self.verify_ssl,
                                data=json.dumps(data))
         return response(request)
@@ -334,9 +345,9 @@ class Aptly(object):
         if kwargs:
             params.update(kwargs)
 
-        request = requests.delete('{0}/{1}/{2}'.format(
-                                  self.api_url['publish'],
-                                  prefix if prefix else '', distr),
+        request = requests.delete('{0}/{1}/{2}'.format(self.api_url['publish'],
+                                                       prefix if prefix else '',
+                                                       distr),
                                   params=params, headers=self.headers,
                                   verify=self.verify_ssl)
         return response(request)
@@ -363,11 +374,11 @@ class Aptly(object):
             data.update(kwargs)
 
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
-        request = requests.post('{0}/{1}/snapshots'.format(
-                                self.api_url['repos'], rep_name),
+        request = requests.post('{0}/{1}/snapshots'.format(self.api_url['repos'],
+                                                           rep_name),
                                 headers=headers, verify=self.verify_ssl,
                                 data=json.dumps(data))
-        return response(request) 
+        return response(request)
 
 
     def create_snapshot_from_pkg(self, **kwargs):
@@ -396,21 +407,22 @@ class Aptly(object):
 
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
         request = requests.put('{0}/{1}'.format(self.api_url['snapshots'],
-                               snap_name), headers=headers,
-                               verify=self.verify_ssl, data=json.dumps(data))
+                                                snap_name),
+                               headers=headers, verify=self.verify_ssl,
+                               data=json.dumps(data))
         return response(request)
 
 
     def show_snapshot(self, snap_name):
         """Get information about snapshot by name"""
         request = requests.get('{0}/{1}'.format(self.api_url['snapshots'],
-                               snap_name), headers=self.headers,
-                               verify=self.verify_ssl)
+                                                snap_name),
+                               headers=self.headers, verify=self.verify_ssl)
         return response(request)
 
 
     def delete_snapshot(self, snap_name, **kwargs):
-        """Delete snapshot. Snapshot can't be deleted if it is 
+        """Delete snapshot. Snapshot can't be deleted if it is
         published. Aptly would refuse to delete snapshot if it has
         been used as source to create other snapshots, but that could
         be overridden with force parameter.
@@ -420,7 +432,8 @@ class Aptly(object):
             params.update(kwargs)
 
         request = requests.get('{0}/{1}'.format(self.api_url['snapshots'],
-                               snap_name), headers=self.headers, params=params,
+                                                snap_name),
+                               headers=self.headers, params=params,
                                verify=self.verify_ssl)
         return response(request)
 
@@ -453,9 +466,9 @@ class Aptly(object):
 
     def aptly_version(self):
         """Return current aptly version"""
-        request = requests.get('{0}/version'.format(self.api), 
+        request = requests.get('{0}/version'.format(self.api),
                                headers=self.headers, verify=self.verify_ssl)
-        return response(request) 
+        return response(request)
 
 
     def get_graph(self, ext='png'):
