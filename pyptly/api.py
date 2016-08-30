@@ -1,6 +1,6 @@
-import requests
-import json
 import base64
+import json
+import requests
 from pyptly.utils import prefix_sanitized, response
 
 class Aptly(object):
@@ -210,7 +210,7 @@ class Aptly(object):
         :param key: package key
         """
         request = requests.get('{0}/{1}'.format(self.api_url['packages'], 
-                               name), headers=self.headers,
+                               key), headers=self.headers,
                                verify=self.verify_ssl)
         return response(request)
 
@@ -404,7 +404,7 @@ class Aptly(object):
     def show_snapshot(self, snap_name):
         """Get information about snapshot by name"""
         request = requests.get('{0}/{1}'.format(self.api_url['snapshots'],
-                               snap_name), headers=headers,
+                               snap_name), headers=self.headers,
                                verify=self.verify_ssl)
         return response(request)
 
@@ -420,7 +420,7 @@ class Aptly(object):
             params.update(kwargs)
 
         request = requests.get('{0}/{1}'.format(self.api_url['snapshots'],
-                               snap_name), headers=headers, params=params,
+                               snap_name), headers=self.headers, params=params,
                                verify=self.verify_ssl)
         return response(request)
 
