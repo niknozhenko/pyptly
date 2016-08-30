@@ -1,4 +1,4 @@
-sudo: false
+sudo: required
 
 language: python
 
@@ -7,6 +7,13 @@ python:
 - '3.3'
 - '3.4'
 - '3.5'
+
+before_install:
+  - sudo apt-key adv --keyserver keys.gnupg.net --recv-keys 9E3E53F19C7DE460
+  - echo "deb http://repo.aptly.info/ squeeze main" | sudo tee -a /etc/apt/sources.list
+  - sudo apt-get update -q
+  - sudo apt-get install aptly -y
+  - sudo aptly api serve -no-lock=true -listen "127.0.0.1:8080" &
 
 install:
   - pip install -r requirements.txt -r test_requirements.txt
