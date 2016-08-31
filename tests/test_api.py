@@ -12,6 +12,6 @@ class Test_api(AptlyTestCase):
         assert_is_instance(version['Version'], six.string_types)
 
 
-    def test_aptly_version(self):
+    def test_get_local_repos(self):
         repos = self.api.get_local_repos()
         assert_is_instance(repos, list)
