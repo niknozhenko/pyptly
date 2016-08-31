@@ -1,8 +1,7 @@
 import pyptly
 import os
 import six
-from nose.tools import assert_equals, assert_is_instance
-from .conf import AptlyTestCase
+from .conf import AptlyTestCase, assert_is_instance, assert_equals
 
 
 class Test_misc_methods(AptlyTestCase):
