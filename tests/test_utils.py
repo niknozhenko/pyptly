@@ -1,13 +1,6 @@
 import requests
 from pyptly.utils import prefix_sanitized, response
-from nose.tools import assert_equals
-
-# assert_is_instance appeared in python 3.2 and was backported to 2.7
-try:
-    from nose.tools import assert_is_instance
-except ImportError:
-    def assert_is_instance(obj, cls, msg=None):
-        assert_true(isinstance(obj, cls), msg)
+from nose.tools import assert_equals, assert_is_instance
 
 def test_prefix():
     test_map = ( ('.', ':.'),
