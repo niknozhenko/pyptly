@@ -1,2 +1,7 @@
 [run]
 source = pyptly
+
+[report]
+omit =
+  */python?.?/*
+  */site-packages/*
