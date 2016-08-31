@@ -1,6 +1,6 @@
 import requests
 from pyptly.utils import prefix_sanitized, response
-from nose.tools import assert_equals, assert_is_instance
+from .conf import assert_is_instance, assert_equals
 
 def test_prefix():
     test_map = ( ('.', ':.'),
