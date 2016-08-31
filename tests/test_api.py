@@ -14,7 +14,7 @@ class Test_misc_methods(AptlyTestCase):
 
 
     def test_get_graph(self):
-        file_path = self.api.get_graph():
+        file_path = self.api.get_graph()
         assert os.path.exists(file_path['Path'])
 
 
