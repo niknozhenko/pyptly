@@ -60,7 +60,7 @@ class Test_local_repo_methods(AptlyTestCase):
 
 
     def test_4_delete_local_repo(self):
-        del_repo = delete_local_repo(self.repo_name)
+        del_repo = self.api.delete_local_repo(self.repo_name)
         assert_is_instance(del_repo, dict)
 
 
