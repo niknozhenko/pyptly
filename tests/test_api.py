@@ -39,10 +39,10 @@ class Test_local_repo_methods(AptlyTestCase):
 
     def test_2_show_local_repo(self):
         repo_info = self.api.show_local_repo(self.repo_name)
-        assert_equals(new_repo['Name'], self.repo_name)
-        assert_equals(new_repo['Comment'], self.repo_comment)
-        assert_equals(new_repo['DefaultDistribution'], self.repo_distr)
-        assert_equals(new_repo['DefaultComponent'], self.repo_component)
+        assert_equals(repo_info['Name'], self.repo_name)
+        assert_equals(repo_info['Comment'], self.repo_comment)
+        assert_equals(repo_info['DefaultDistribution'], self.repo_distr)
+        assert_equals(repo_info['DefaultComponent'], self.repo_component)
 
 
     def test_3_edit_local_repo(self):
@@ -54,9 +54,9 @@ class Test_local_repo_methods(AptlyTestCase):
                                         Comment=new_comment,
                                         DefaultDistribution=new_dist,
                                         DefaultComponent=new_component)
-        assert_equals(new_repo['Comment'], new_comment)
-        assert_equals(new_repo['DefaultDistribution'], new_dist)
-        assert_equals(new_repo['DefaultComponent'], new_component)
+        assert_equals(edited_repo['Comment'], new_comment)
+        assert_equals(edited_repo['DefaultDistribution'], new_dist)
+        assert_equals(edited_repo['DefaultComponent'], new_component)
 
 
     def test_4_delete_local_repo(self):
