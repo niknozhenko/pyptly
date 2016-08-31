@@ -25,7 +25,7 @@ class Test_local_repo_methods(AptlyTestCase):
         assert_is_instance(repos, list)
 
 
-    def test_create_local_repo(self):
+    def test_1_create_local_repo(self):
         new_repo = self.api.create_local_repo(
                                         self.repo_name,
                                         Comment=self.repo_comment,
@@ -36,8 +36,37 @@ class Test_local_repo_methods(AptlyTestCase):
         assert_equals(new_repo['DefaultDistribution'], self.repo_distr)
         assert_equals(new_repo['DefaultComponent'], self.repo_component)
 
+
+    def test_2_show_local_repo(self):
         repo_info = self.api.show_local_repo(self.repo_name)
         assert_equals(new_repo['Name'], self.repo_name)
         assert_equals(new_repo['Comment'], self.repo_comment)
         assert_equals(new_repo['DefaultDistribution'], self.repo_distr)
         assert_equals(new_repo['DefaultComponent'], self.repo_component)
+
+
+    def test_3_edit_local_repo(self):
+        new_comment = 'changed comment'
+        new_dist = 'new_distr'
+        new_component = 'mainnew'
+        edited_repo = self.api.edit_local_repo(
+                                        self.repo_name,
+                                        Comment=new_comment,
+                                        DefaultDistribution=new_dist,
+                                        DefaultComponent=new_component)
+        assert_equals(new_repo['Comment'], new_comment)
+        assert_equals(new_repo['DefaultDistribution'], new_dist)
+        assert_equals(new_repo['DefaultComponent'], new_component)
+
+
+    def test_4_delete_local_repo(self):
+        del_repo = delete_local_repo(self.repo_name)
+        assert_is_instance(del_repo, dict)
+
+
+
+class Test_file_upload_methods(AptlyTestCase):
+
+    def test_get_dirs(self):
+        dirs = self.api.get_dirs()
+        assert_is_instance(dirs, list)
