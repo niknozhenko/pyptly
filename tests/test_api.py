@@ -1,16 +1,25 @@
 import pyptly
+import os
 import six
 from nose.tools import assert_equals, assert_is_instance
 from .conf import AptlyTestCase
 
 
-class Test_api(AptlyTestCase):
+class Test_misc_methods(AptlyTestCase):
 
     def test_aptly_version(self):
         version = self.api.aptly_version()
         assert_is_instance(version, dict)
         assert_is_instance(version['Version'], six.string_types)
 
+
+    def test_get_graph(self):
+        file_path = self.api.get_graph():
+        assert os.path.exists(file_path['Path'])
+
+
+
+class Test_local_repo_methods(AptlyTestCase):
 
     def test_get_local_repos(self):
         repos = self.api.get_local_repos()
@@ -23,6 +32,12 @@ class Test_api(AptlyTestCase):
                                         Comment=self.repo_comment,
                                         DefaultDistribution=self.repo_distr,
                                         DefaultComponent=self.repo_component)
+        assert_equals(new_repo['Name'], self.repo_name)
+        assert_equals(new_repo['Comment'], self.repo_comment)
+        assert_equals(new_repo['DefaultDistribution'], self.repo_distr)
+        assert_equals(new_repo['DefaultComponent'], self.repo_component)
+
+        repo_info = self.api.show_local_repo(self.repo_name)
         assert_equals(new_repo['Name'], self.repo_name)
         assert_equals(new_repo['Comment'], self.repo_comment)
         assert_equals(new_repo['DefaultDistribution'], self.repo_distr)

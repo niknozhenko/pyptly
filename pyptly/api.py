@@ -41,11 +41,7 @@ class Aptly(object):
         """Create empty local repository with specified parameters
 
         :param name: name of the new local repository
-        :param comment: text describing local repository, for the user
-        :param distr: default distribution when publishing from this
-        local repo
-        :param component: default component when publishing from this
-        local repo
+        :param **kwargs: all parameters allowed by Aptly API
         """
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
         data = {'Name': name}
@@ -70,6 +66,8 @@ class Aptly(object):
     def show_repo_packages(self, name, **kwargs):
         """List all packages in local repository or perform search on
         repository contents and return result
+        :param name: name of the local repository
+        :param **kwargs: all parameters allowed by Aptly API
         """
         params = {}
         if kwargs:
@@ -85,12 +83,8 @@ class Aptly(object):
     def edit_local_repo(self, name, **kwargs):
         """Update local repository meta information
 
-        :param name: name of the new local repository
-        :param comment: text describing local repository, for the user
-        :param distr: default distribution when publishing from this
-        local repo
-        :param component: default component when publishing from this
-        local repo
+        :param name: name of the local repository
+        :param **kwargs: all parameters allowed by Aptly API
         """
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
         data = {}
@@ -109,8 +103,8 @@ class Aptly(object):
         would refuse to delete it by default, but that can be overridden
         with force flag
 
-        :param force: when value is set to True, delete local repository
-        even if it has snapshots
+        :param name: name of the local repository
+        :param **kwargs: all parameters allowed by Aptly API
         """
         params = {}
         if kwargs:
@@ -135,10 +129,7 @@ class Aptly(object):
 
         :param name: name of the local repository
         :param dirname: directory with uploaded packages to import
-        :param file: file to import
-        :param no_rm: when value is set to True, don't remove any file
-        :param force_repl: when value is set to True, remove packages
-        conflicting with package being added (in local repository)
+        :param **kwargs: all parameters allowed by Aptly API
         """
 
         filename = kwargs.pop('file', None)
@@ -168,7 +159,7 @@ class Aptly(object):
         same local repository.
 
         :param name: name of the local repository
-        :param pkg_ref: list of package references (package keys)
+        :param **kwargs: all parameters allowed by Aptly API
         """
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
         data = {}
@@ -190,7 +181,7 @@ class Aptly(object):
         show_repo_packages
 
         :param name: name of the local repository
-        :param pkg_ref: list of package references (package keys)
+        :param **kwargs: all parameters allowed by Aptly API
         """
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
         data = {}
@@ -295,6 +286,8 @@ class Aptly(object):
     def publish(self, **kwargs):
         """Publish local repository or snapshot under specified prefix.
         Storage might be passed in prefix as well, e.g. s3:packages/.
+
+        :param **kwargs: all parameters allowed by Aptly API
         """
         prefix = kwargs.pop('prefix', None)
         if prefix:
@@ -315,6 +308,8 @@ class Aptly(object):
         would be updated to match local repository contents
         * if snapshots have been been published, it is possible to
         switch each component to new snapshot
+
+        :param **kwargs: all parameters allowed by Aptly API
         """
         prefix = kwargs.pop('prefix', None)
         if prefix:
@@ -336,6 +331,8 @@ class Aptly(object):
     def delete_publish(self, distr, **kwargs):
         """Delete published repository, clean up files in published
         directory
+
+        :param **kwargs: all parameters allowed by Aptly API
         """
         prefix = kwargs.pop('prefix', None)
         if prefix:
@@ -354,7 +351,10 @@ class Aptly(object):
 
 
     def get_snapshots(self, **kwargs):
-        """eturn list of all snapshots created in the system"""
+        """Return list of all snapshots created in the system
+
+        :param **kwargs: all parameters allowed by Aptly API
+        """
         params = {}
         if kwargs:
             params.update(kwargs)
@@ -368,6 +368,8 @@ class Aptly(object):
     def create_snapshot_from_repo(self, rep_name, **kwargs):
         """Create snapshot of current local repository :name contents
         as new snapshot with name :snapname
+
+        :param **kwargs: all parameters allowed by Aptly API
         """
         data = {}
         if kwargs:
@@ -387,6 +389,8 @@ class Aptly(object):
         This API creates snapshot out of any list of package references.
         Package references could be obtained from other snapshots, local
         repos or mirrors.
+
+        :param **kwargs: all parameters allowed by Aptly API
         """
         data = {}
         if kwargs:
@@ -400,7 +404,10 @@ class Aptly(object):
 
 
     def update_snapshot(self, snap_name, **kwargs):
-        """Update snapshot's description or name"""
+        """Update snapshot's description or name
+
+        :param **kwargs: all parameters allowed by Aptly API
+        """
         data = {}
         if kwargs:
             data.update(kwargs)
@@ -426,6 +433,8 @@ class Aptly(object):
         published. Aptly would refuse to delete snapshot if it has
         been used as source to create other snapshots, but that could
         be overridden with force parameter.
+
+        :param **kwargs: all parameters allowed by Aptly API
         """
         params = {}
         if kwargs:
@@ -441,6 +450,8 @@ class Aptly(object):
     def show_snapshot_packages(self, snap_name, **kwargs):
         """List all packages in snapshot or perform search on snapshot
         contents and return result.
+
+        :param **kwargs: all parameters allowed by Aptly API
         """
         params = {}
         if kwargs:
@@ -471,11 +482,19 @@ class Aptly(object):
         return response(request)
 
 
-    def get_graph(self, ext='png'):
+    def get_graph(self, path='', ext='png'):
         """Generate graph of aptly objects (same as in aptly graph
         command).
+
+        :param path: file path for graph
         :param ext: specifies desired file extension, e.g. .png, .svg.
         """
+        path = path if path else 'graph.' + ext
         request = requests.get('{0}/graph.{1}'.format(self.api, ext),
                                headers=self.headers, verify=self.verify_ssl)
-        return response(request)
+        if request.status_code == 200:
+            with open(path, 'wb') as file_pointer:
+                for chunk in request:
+                    file_pointer.write(chunk)
+
+        return {'Path': path}

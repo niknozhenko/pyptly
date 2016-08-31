@@ -25,7 +25,7 @@ before_script:
   - sudo aptly api serve -no-lock=true -listen "127.0.0.1:8080" &
 
 script:
-  - nosetests -v --with-coverage -c tests/travis-tests.cfg
+  - nosetests -v --cover-package=pyptly -c tests/travis-tests.cfg
 
 after_success:
   - coveralls
