@@ -91,5 +91,11 @@ class Test_upload_files(AptlyTestCase):
             assert_in(os.path.basename(pkg), files)
 
     def test_4_delete_file(self):
-        rm_file = self.api.delete_file(self.upload_dir, self.test_pkg1)
+        rm_file = self.api.delete_file(self.upload_dir,
+                                       os.path.basename(self.test_pkg1))
+        assert_equals(bool(rm_file), False)
+
+
+    def test_5_delete_dir(self):
+        rm_dir = self.api.delete_dir(self.upload_dir)
         assert_equals(bool(rm_file), False)
