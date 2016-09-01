@@ -74,7 +74,6 @@ class Test_upload_files(AptlyTestCase):
         assert_is_instance(dirs, list)
 
     def test_upload_files(self):
-        self.api.create_local_repo(self.repo_name)
         upload_test1 = self.api.upload_files(self.upload_dir, self.test_pkg1)
         assert_equals(upload_test1[0],
                       self.upload_dir + '/' + os.path.basename(self.test_pkg1))
