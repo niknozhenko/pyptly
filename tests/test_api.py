@@ -61,15 +61,11 @@ class Test_local_repo_methods(AptlyTestCase):
 
     def test_4_delete_local_repo(self):
         del_repo = self.api.delete_local_repo(self.repo_name)
-        assert_equals(del_repo['Name'], self.repo_name)
+        assert_equals(bool(del_repo), False)
 
 
 
 class Test_file_upload_methods(AptlyTestCase):
-
-    def setUp(self):
-        self.api.create_local_repo(self.repo_name)
-
 
     def test_get_dirs(self):
         dirs = self.api.get_dirs()
@@ -77,6 +73,7 @@ class Test_file_upload_methods(AptlyTestCase):
 
 
     def test_upload_files(self):
+        self.api.create_local_repo(self.repo_name)
         upload_test1 = self.api.upload_files(self.upload_dir, self.test_pkg1)
         assert_equals(upload_test1[0],
                       self.upload_dir + '/' + os.path.basename(self.test_pkg1))
