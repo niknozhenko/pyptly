@@ -67,8 +67,7 @@ class Test_local_repo_methods(AptlyTestCase):
 
 class Test_file_upload_methods(AptlyTestCase):
 
-    @classmethod
-    def setUpClass(cls):
+    def setUp(self):
         self.api.create_local_repo(self.repo_name)
 
 
@@ -79,4 +78,5 @@ class Test_file_upload_methods(AptlyTestCase):
 
     def test_upload_files(self):
         upload_test1 = self.api.upload_files(self.upload_dir, self.test_pkg1)
-        assert_equals(upload_test1[0], self.upload_dir + '/' + self.test_pkg1)
+        assert_equals(upload_test1[0],
+                      self.upload_dir + '/' + os.path.basename(self.test_pkg1))
