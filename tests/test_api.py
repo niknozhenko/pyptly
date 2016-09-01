@@ -98,4 +98,4 @@ class Test_upload_files(AptlyTestCase):
 
     def test_5_delete_dir(self):
         rm_dir = self.api.delete_dir(self.upload_dir)
-        assert_equals(bool(rm_file), False)
+        assert_equals(bool(rm_dir), False)
