@@ -61,12 +61,22 @@ class Test_local_repo_methods(AptlyTestCase):
 
     def test_4_delete_local_repo(self):
         del_repo = self.api.delete_local_repo(self.repo_name)
-        assert_is_instance(del_repo, dict)
+        assert_equals(del_repo['Name'], self.repo_name)
 
 
 
 class Test_file_upload_methods(AptlyTestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        self.api.create_local_repo(self.repo_name)
+
+
     def test_get_dirs(self):
         dirs = self.api.get_dirs()
         assert_is_instance(dirs, list)
+
+
+    def test_upload_files(self):
+        upload_test1 = self.api.upload_files(self.upload_dir, self.test_pkg1)
+        assert_equals(upload_test1[0], self.upload_dir + '/' + self.test_pkg1)
