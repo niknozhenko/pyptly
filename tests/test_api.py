@@ -86,6 +86,13 @@ class Test_package_api(AptlyTestCase):
         assert_true(bool(repo_pkgs))
 
 
+    def test_2_show_pkg_bykey(self):
+        repo_pkgs = self.api.show_repo_packages(self.repo_name)
+        escaped_key = repo_pkgs[0].replace(' ', '%20')
+        pkg = self.api.show_pkg_bykey(escaped_key)
+        assert_in('ShortKey', pkg)
+
+
 class Test_upload_files(AptlyTestCase):
 
     @classmethod
