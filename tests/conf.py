@@ -1,6 +1,6 @@
 import pyptly
 import six
-from nose.tools import assert_equals, assert_true
+from nose.tools import assert_equals, assert_true, assert_in
 
 
 # assert_is_instance appeared in python 3.2 and was backported to 2.7
@@ -25,4 +25,5 @@ class AptlyTestCase(unittest.TestCase):
     repo_distr = 'test_distr'
     upload_dir = 'python-packages'
     test_pkg1 = 'tests/files/python-talloc_2.1.2-0+deb8u1_amd64.deb'
-    test_pkg21 = 'tests/files/python-gdbm_2.7.8-2+b1_amd64.deb'
+    test_pkg2 = 'tests/files/python-gdbm_2.7.8-2+b1_amd64.deb'
+    test_pkg3 = 'tests/files/unzip_6.0-16+deb8u2_amd64.deb'

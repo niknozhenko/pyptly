@@ -1,7 +1,7 @@
 import pyptly
 import os
 import six
-from .conf import AptlyTestCase, assert_is_instance, assert_equals
+from .conf import AptlyTestCase, assert_is_instance, assert_equals, assert_in
 
 
 class Test_local_repo_methods(AptlyTestCase):
@@ -78,3 +78,10 @@ class Test_upload_files(AptlyTestCase):
         upload_test1 = self.api.upload_files(self.upload_dir, self.test_pkg1)
         assert_equals(upload_test1[0],
                       self.upload_dir + '/' + os.path.basename(self.test_pkg1))
+
+        upload_test2 = self.api.upload_files(self.upload_dir, [self.test_pkg2,
+                                                               self.test_pkg3])
+
+        for pkg in [self.test_pkg2, self.test_pkg3]:
+            assert_in(self.upload_dir + '/' + os.path.basename(pkg),
+                      upload_test2)
