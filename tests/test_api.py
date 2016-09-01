@@ -1,7 +1,8 @@
 import pyptly
 import os
 import six
-from .conf import AptlyTestCase, assert_is_instance, assert_equals, assert_in
+from .conf import (AptlyTestCase, assert_is_instance, assert_equals,
+                   assert_in, assert_true)
 
 
 class Test_local_repo_methods(AptlyTestCase):
@@ -43,7 +44,7 @@ class Test_local_repo_methods(AptlyTestCase):
 
     def test_4_delete_local_repo(self):
         del_repo = self.api.delete_local_repo(self.repo_name)
-        assert_equals(bool(del_repo), False)
+        assert_true(not bool(del_repo))
 
 
 class Test_misc_methods(AptlyTestCase):
@@ -59,16 +60,25 @@ class Test_misc_methods(AptlyTestCase):
         assert os.path.exists(file_path['Path'])
 
 
-#class Test_package_api(AptlyTestCase):
-#
-#    @classmethod
-#    def setUpClass(cls):
-#        cls.api.create_local_repo(cls.repo_name)
-#        cls.api.upload_files(cls.upload_dir, cls.test_pkg1)
-#
-#    @classmethod
-#    def tearDownClass(cls):
-#        cls.api.delete_local_repo(cls.repo_name)
+class Test_package_api(AptlyTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.api.create_local_repo(cls.repo_name)
+        cls.api.upload_files(cls.upload_dir,
+                             cls.test_pkg1,
+                             cls.test_pkg2,
+                             cls.test_pkg3)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.api.delete_local_repo(cls.repo_name)
+
+    def test_1_add_uploaded_pkg(self):
+        added_1 = self.api.add_uploaded_pkg(
+                                    self.repo_name, self.upload_dir,
+                                    filename=os.path.basename(self.test_pkg1))
+        assert_true(not bool(added_1['FailedFiles']))
 
 
 class Test_upload_files(AptlyTestCase):
@@ -105,10 +115,10 @@ class Test_upload_files(AptlyTestCase):
     def test_4_delete_file(self):
         rm_file = self.api.delete_file(self.upload_dir,
                                        os.path.basename(self.test_pkg1))
-        assert_equals(bool(rm_file), False)
+        assert_true(not bool(rm_file))
 
 
     def test_5_delete_dir(self):
         rm_dir = self.api.delete_dir(self.upload_dir)
-        assert_equals(bool(rm_dir), False)
+        assert_true(not bool(rm_dir))
 

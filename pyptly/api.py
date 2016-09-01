@@ -132,7 +132,7 @@ class Aptly(object):
         :param **kwargs: all parameters allowed by Aptly API
         """
 
-        filename = kwargs.pop('file', None)
+        filename = kwargs.pop('filename', None)
         params = {}
         if kwargs:
             params.update(kwargs)
