@@ -69,11 +69,11 @@ class Test_upload_files(AptlyTestCase):
     def tearDownClass(cls):
         cls.api.delete_local_repo(cls.repo_name)
 
-    def test_get_dirs(self):
+    def test_1_get_dirs(self):
         dirs = self.api.get_dirs()
         assert_is_instance(dirs, list)
 
-    def test_upload_files(self):
+    def test_2_upload_files(self):
         upload_test1 = self.api.upload_files(self.upload_dir, self.test_pkg1)
         assert_equals(upload_test1[0],
                       self.upload_dir + '/' + os.path.basename(self.test_pkg1))
@@ -86,7 +86,7 @@ class Test_upload_files(AptlyTestCase):
                       upload_test2)
 
 
-    def test_get_files(self):
+    def test_3_get_files(self):
         files = self.api.get_files(self.upload_dir)
         for pkg in [self.test_pkg1, self.test_pkg2, self.test_pkg3]:
             assert_in(self.upload_dir + '/' + os.path.basename(pkg),
