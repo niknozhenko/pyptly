@@ -18,12 +18,11 @@ else:
 
 
 class AptlyTestCase(unittest.TestCase):
-    def setUp(self):
-        self.api = pyptly.Aptly("http://127.0.0.1:8080")
-        self.repo_name = 'aptly-repo'
-        self.repo_comment = 'New test repository'
-        self.repo_component = 'main'
-        self.repo_distr = 'test_distr'
-        self.upload_dir = 'python-packages'
-        self.test_pkg1 = 'tests/files/python-talloc_2.1.2-0+deb8u1_amd64.deb'
-        self.test_pkg21 = 'tests/files/python-gdbm_2.7.8-2+b1_amd64.deb'
+    self.api = pyptly.Aptly("http://127.0.0.1:8080")
+    self.repo_name = 'aptly-repo'
+    self.repo_comment = 'New test repository'
+    self.repo_component = 'main'
+    self.repo_distr = 'test_distr'
+    self.upload_dir = 'python-packages'
+    self.test_pkg1 = 'tests/files/python-talloc_2.1.2-0+deb8u1_amd64.deb'
+    self.test_pkg21 = 'tests/files/python-gdbm_2.7.8-2+b1_amd64.deb'
