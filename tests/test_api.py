@@ -66,19 +66,19 @@ class Test_package_api(AptlyTestCase):
     def setUpClass(cls):
         cls.api.create_local_repo(cls.repo_name)
         cls.api.upload_files(cls.upload_dir,
-                             cls.test_pkg1,
-                             cls.test_pkg2,
-                             cls.test_pkg3)
+                             [cls.test_pkg1, cls.test_pkg2, cls.test_pkg3])
 
     @classmethod
     def tearDownClass(cls):
         cls.api.delete_local_repo(cls.repo_name)
 
     def test_1_add_uploaded_pkg(self):
-        added_1 = self.api.add_uploaded_pkg(
+        added_pkg = self.api.add_uploaded_pkg(
                                     self.repo_name, self.upload_dir,
                                     filename=os.path.basename(self.test_pkg1))
-        assert_true(not bool(added_1['FailedFiles']))
+        assert_true(not bool(added_pkg['FailedFiles']))
+        added_pkgs = self.api.add_uploaded_pkg(self.repo_name, self.upload_dir)
+        assert_true(not bool(added_pkg['FailedFiles']))
 
 
 class Test_upload_files(AptlyTestCase):
