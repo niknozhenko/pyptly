@@ -265,9 +265,9 @@ class Aptly(object):
         :param files: files to upload. Single file path or list of pathes.
         """
         if isinstance(files, list):
-            files = [('file', open(f, 'rb')) for f in files]
+            files = [{'file': open(f, 'rb')} for f in files]
         else:
-            files = ('file', open(files, 'rb'))
+            files = {'file': open(files, 'rb')}
 
         request = requests.post('{0}/{1}'.format(self.api_url['files'],
                                                  dirname),
