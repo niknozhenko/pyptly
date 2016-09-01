@@ -84,3 +84,10 @@ class Test_upload_files(AptlyTestCase):
         for pkg in [self.test_pkg2, self.test_pkg3]:
             assert_in(self.upload_dir + '/' + os.path.basename(pkg),
                       upload_test2)
+
+
+    def test_get_files():
+        files = get_files(self.upload_dir)
+        for pkg in [elf.test_pkg1, self.test_pkg2, self.test_pkg3]:
+            assert_in(self.upload_dir + '/' + os.path.basename(pkg),
+                      upload_test2)
