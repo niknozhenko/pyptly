@@ -59,6 +59,18 @@ class Test_misc_methods(AptlyTestCase):
         assert os.path.exists(file_path['Path'])
 
 
+#class Test_package_api(AptlyTestCase):
+#
+#    @classmethod
+#    def setUpClass(cls):
+#        cls.api.create_local_repo(cls.repo_name)
+#        cls.api.upload_files(cls.upload_dir, cls.test_pkg1)
+#
+#    @classmethod
+#    def tearDownClass(cls):
+#        cls.api.delete_local_repo(cls.repo_name)
+
+
 class Test_upload_files(AptlyTestCase):
 
     @classmethod
@@ -99,3 +111,4 @@ class Test_upload_files(AptlyTestCase):
     def test_5_delete_dir(self):
         rm_dir = self.api.delete_dir(self.upload_dir)
         assert_equals(bool(rm_dir), False)
+

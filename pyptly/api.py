@@ -137,12 +137,18 @@ class Aptly(object):
         if kwargs:
             params.update(kwargs)
 
-        request = requests.post('{0}/{1}/file/{2}/{3}'.format(
-                                                self.api_url['repos'],
-                                                name, dirname,
-                                                filename if filename else ''),
-                                headers=self.headers, verify=self.verify_ssl,
-                                params=params)
+        if filename:
+            request = requests.post('{0}/{1}/file/{2}/{3}'.format(
+                                                    self.api_url['repos'],
+                                                    name, dirname, filename),
+                                    headers=self.headers,
+                                    verify=self.verify_ssl, params=params)
+        else:
+            request = requests.post('{0}/{1}/file/{2}'.format(
+                                                    self.api_url['repos'],
+                                                    name, dirname),
+                                    headers=self.headers,
+                                    verify=self.verify_ssl, params=params)
         return response(request)
 
 
