@@ -17,7 +17,7 @@ class Aptly(object):
         if self.host.startswith('http://') or self.host.startswith('https://'):
             pass
         else:
-            self.host = 'https://' + self.host
+            self.host = 'http://' + self.host
 
         self.api = self.host + "/api"
         self.api_url = {'repos': self.api + '/repos',
