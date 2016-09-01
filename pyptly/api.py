@@ -265,7 +265,7 @@ class Aptly(object):
         :param files: files to upload. Single file path or list of pathes.
         """
         if isinstance(files, list):
-            files = [('file': open(f, 'rb')) for f in files]
+            files = [('file', open(f, 'rb')) for f in files]
         else:
             files = {'file': open(files, 'rb')}
 
