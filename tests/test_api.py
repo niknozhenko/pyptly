@@ -93,6 +93,14 @@ class Test_package_api(AptlyTestCase):
         assert_in('ShortKey', pkg)
 
 
+    def test_3_delete_pkg_bykey(self):
+        repo_pkgs = self.api.show_repo_packages(self.repo_name)
+        repo_info = self.api.show_local_repo(self.repo_name) 
+        del_pkg = self.api.delete_pkg_bykey(self.repo_name,
+                                            PackageRefs=[repo_pkgs[0]])
+        assert_equals(repo_info, del_pkg)
+
+
 class Test_upload_files(AptlyTestCase):
 
     @classmethod
