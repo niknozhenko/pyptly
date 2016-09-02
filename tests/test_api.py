@@ -81,20 +81,24 @@ class Test_package_api(AptlyTestCase):
         added_pkgs = self.api.add_uploaded_pkg(self.repo_name, self.upload_dir)
         assert_true(not bool(added_pkgs['FailedFiles']))
 
-
     def test_2_show_repo_packages(self):
         repo_pkgs = self.api.show_repo_packages(self.repo_name, withDeps=1)
         assert_true(bool(repo_pkgs))
 
-
-    def test_2_show_pkg_bykey(self):
+    def test_3_show_pkg_bykey(self):
         repo_pkgs = self.api.show_repo_packages(self.repo_name)
         escaped_key = repo_pkgs[0].replace(' ', '%20')
         pkg = self.api.show_pkg_bykey(escaped_key)
         assert_in('ShortKey', pkg)
 
+    def test_4_show_pkg_bykey(self):
+        repo_info = self.create_local_repo('test_repo2')
+        repo_pkgs = self.api.show_repo_packages(self.repo_name)
+        add_pkg = self.api.add_pkg_bykey('test_repo2', PackageRefs=repo_pkgs)
+        assert_equals(repo_info, add_pkg)
 
-    def test_3_delete_pkg_bykey(self):
+
+    def test_5_delete_pkg_bykey(self):
         repo_pkgs = self.api.show_repo_packages(self.repo_name)
         repo_info = self.api.show_local_repo(self.repo_name) 
         del_pkg = self.api.delete_pkg_bykey(self.repo_name,
