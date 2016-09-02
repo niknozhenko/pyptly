@@ -135,7 +135,12 @@ class Test_snapshots(AptlyTestCase):
 
     def test_4_show_snapshot(self):
         snap_info = self.api.show_snapshot(self.snapshot_name)
-        assert_equals(snap['Name'], self.snapshot_name)
+        assert_equals(snap_info['Name'], self.snapshot_name)
+
+
+    def test_5_delete_snapshot(self):
+        snap_delete = self.api.delete_snapshot(self.snapshot_name)
+        assert_true(not bool(snap_delete))
 
 
 
