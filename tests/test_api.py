@@ -143,7 +143,7 @@ class Test_snapshots(AptlyTestCase):
                                            Name=self.snapshot_name2)
         snap_diff = self.api.snapshots_diff(self.snapshot_name1,
                                             self.snapshot_name2)
-        assert_equals(snap_delete, [])
+        assert_equals(snap_diff, [])
 
     def test_6_delete_snapshot(self):
         snap_delete1 = self.api.delete_snapshot(self.snapshot_name1)
