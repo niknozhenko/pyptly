@@ -119,6 +119,7 @@ class Test_publish(AptlyTestCase):
                                    Sources=[{'Name': self.repo_name}],
                                    Distribution=self.publish_distr,
                                    Architectures=['amd64'],
+                                   prefix=self.prefix,
                                    Signing={"Skip": True})
         assert_equals(publish['Sources'][0]['Name'], self.repo_name)
 
@@ -128,11 +129,13 @@ class Test_publish(AptlyTestCase):
 
     def test_3_update_publish(self):
         upd_publish = self.api.update_publish(self.publish_distr,
+                                              prefix=self.prefix,
                                               Signing={"Skip": True})
         assert_equals(upd_publish['Distribution'], self.publish_distr)
 
     def test_4_delete_publish(self):
-        del_publish = self.api.delete_publish(self.publish_distr)
+        del_publish = self.api.delete_publish(self.publish_distr,
+                                              prefix=self.prefix)
         assert_equals(del_publish, {})
 
 
@@ -156,7 +159,7 @@ class Test_snapshots(AptlyTestCase):
         assert_in('CreatedAt', snap)
 
     def test_2_get_snapshots(self):
-        snaps = self.api.get_snapshots()
+        snaps = self.api.get_snapshots(sort='time')
         assert_in('Name', snaps[0])
         assert_in('CreatedAt', snaps[0])
 
