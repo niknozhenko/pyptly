@@ -133,6 +133,12 @@ class Test_snapshots(AptlyTestCase):
         assert_equals(snap_upd['Description'], self.snapshot_description)
 
 
+    def test_4_show_snapshot(self):
+        snap_info = self.api.show_snapshot(self.snapshot_name)
+        assert_equals(snap['Name'], self.snapshot_name)
+
+
+
 class Test_upload_files(AptlyTestCase):
 
     @classmethod
