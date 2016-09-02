@@ -101,6 +101,25 @@ class Test_package_api(AptlyTestCase):
         assert_equals(repo_info, del_pkg)
 
 
+class Test_publish(AptlyTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.api.create_local_repo(cls.repo_name)
+        cls.api.upload_files(cls.upload_dir,
+                             [cls.test_pkg1, cls.test_pkg2, cls.test_pkg3])
+        cls.api.add_uploaded_pkg(cls.repo_name, cls.upload_dir)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.api.delete_local_repo(cls.repo_name, force=1)
+
+    def test_1_publish(self):
+        publish = self.api.publish(SourceKind='local', Sources=self.repo_name,
+                                   Architectures=['amd64'])
+        assert_equals(publish['Sources'][0]['Name'], self.repo_name)
+
+
 class Test_snapshots(AptlyTestCase):
 
     @classmethod
