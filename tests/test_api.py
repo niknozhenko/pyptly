@@ -169,39 +169,37 @@ class Test_snapshots(AptlyTestCase):
         assert_in('Name', snaps[0])
         assert_in('CreatedAt', snaps[0])
 
-
     def test_3_update_snapshot(self):
         snap_upd = self.api.update_snapshot(
                                     self.snapshot_name1,
                                     Description=self.snapshot_description)
         assert_equals(snap_upd['Description'], self.snapshot_description)
 
-
     def test_4_show_snapshot(self):
         snap_info = self.api.show_snapshot(self.snapshot_name1)
         assert_equals(snap_info['Name'], self.snapshot_name1)
 
-
-    def test_5_snapshots_diff(self):
-        self.api.create_snapshot_from_repo(self.repo_name,
-                                           Name=self.snapshot_name2)
-        snap_diff = self.api.snapshots_diff(self.snapshot_name1,
-                                            self.snapshot_name2)
-        assert_equals(snap_diff, [])
+    def test_5_create_snapshot_from_pkg(self):
+        repo_pkgs = self.api.show_repo_packages(self.repo_name)
+        create_snap = self.api.create_snapshot_from_pkg(self.snapshot_name2,
+                                                        PackageRefs=repo_pkgs)
+        assert_equals(create_snap['Name'], self.snapshot_name2)
 
     def test_6_show_snapshot_packages(self):
         snap_pkgs = self.api.show_snapshot_packages(self.snapshot_name1,
                                                     format='details')
         assert_is_instance(snap_pkgs, list)
 
-    def test_7_delete_snapshot(self):
+    def test_7_snapshots_diff(self):
+        snap_diff = self.api.snapshots_diff(self.snapshot_name1,
+                                            self.snapshot_name2)
+        assert_equals(snap_diff, [])
+
+    def test_8_delete_snapshot(self):
         snap_delete1 = self.api.delete_snapshot(self.snapshot_name1, force=1)
         snap_delete2 = self.api.delete_snapshot(self.snapshot_name2)
         assert_equals(snap_delete1, {})
         assert_equals(snap_delete2, {})
-
-
-
 
 
 class Test_upload_files(AptlyTestCase):
