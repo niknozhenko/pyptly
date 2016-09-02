@@ -82,7 +82,7 @@ class Test_package_api(AptlyTestCase):
 
 
     def test_2_show_repo_packages(self):
-        repo_pkgs = self.api.show_repo_packages(self.repo_name)
+        repo_pkgs = self.api.show_repo_packages(self.repo_name, withDeps=1)
         assert_true(bool(repo_pkgs))
 
 
