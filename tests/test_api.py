@@ -131,6 +131,10 @@ class Test_publish(AptlyTestCase):
                                               Signing={"Skip": True})
         assert_equals(upd_publish['Distribution'], self.publish_distr)
 
+    def test_4_delete_publish(self):
+        del_publish = self.api.delete_publish(self.publish_distr)
+        assert_equals(del_publish, {})
+
 
 class Test_snapshots(AptlyTestCase):
 
