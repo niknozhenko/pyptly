@@ -48,3 +48,4 @@ class AptlyTestCase(unittest.TestCase):
     test_pkg1 = 'tests/files/python-talloc_2.1.2-0+deb8u1_amd64.deb'
     test_pkg2 = 'tests/files/python-gdbm_2.7.8-2+b1_amd64.deb'
     test_pkg3 = 'tests/files/unzip_6.0-16+deb8u2_amd64.deb'
+    snapshot_name = 'snap-test'

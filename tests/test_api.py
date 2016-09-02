@@ -108,16 +108,22 @@ class Test_snapshots(AptlyTestCase):
         cls.api.create_local_repo(cls.repo_name)
         cls.api.upload_files(cls.upload_dir,
                              [cls.test_pkg1, cls.test_pkg2, cls.test_pkg3])
+        cls.api.add_uploaded_pkg(cls.repo_name, cls.upload_dir)
 
     @classmethod
     def tearDownClass(cls):
         cls.api.delete_local_repo(cls.repo_name)
 
     def test_1_create_snapshot_from_repo(self):
-        snaps = self.api.create_snapshot_from_repo(self.repo_name,
-                                                   Name='snap_test')
-        assert_in('Name', snaps)
-        assert_in('CreatedAt', snaps)
+        snap = self.api.create_snapshot_from_repo(self.repo_name,
+                                                   Name=self.snapshot_name)
+        assert_in('Name', snap)
+        assert_in('CreatedAt', snap)
+
+    def test_2_get_snapshots(self):
+        snaps = self.api.get_snapshots()
+        assert_in('Name', snaps[0])
+        assert_in('CreatedAt', snap[0])
 
 
 class Test_upload_files(AptlyTestCase):
