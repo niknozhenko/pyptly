@@ -138,9 +138,20 @@ class Test_snapshots(AptlyTestCase):
         assert_equals(snap_info['Name'], self.snapshot_name1)
 
 
-    def test_5_delete_snapshot(self):
-        snap_delete = self.api.delete_snapshot(self.snapshot_name1)
-        assert_equals(snap_delete, {})
+    def test_5_snapshots_diff(self):
+        self.api.create_snapshot_from_repo(self.repo_name,
+                                           Name=self.snapshot_name2)
+        snap_diff = self.api.snapshots_diff(self.snapshot_name1,
+                                            self.snapshot_name2)
+        assert_equals(snap_delete, [])
+
+    def test_6_delete_snapshot(self):
+        snap_delete1 = self.api.delete_snapshot(self.snapshot_name1)
+        snap_delete2 = self.api.delete_snapshot(self.snapshot_name2)
+        assert_equals(snap_delete1, {})
+        assert_equals(snap_delete2, {})
+
+
 
 
 
