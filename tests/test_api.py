@@ -123,7 +123,7 @@ class Test_snapshots(AptlyTestCase):
     def test_2_get_snapshots(self):
         snaps = self.api.get_snapshots()
         assert_in('Name', snaps[0])
-        assert_in('CreatedAt', snap[0])
+        assert_in('CreatedAt', snaps[0])
 
 
 class Test_upload_files(AptlyTestCase):
