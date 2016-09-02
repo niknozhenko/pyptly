@@ -119,7 +119,7 @@ class Test_publish(AptlyTestCase):
                                    Sources=[{'Name': self.repo_name}],
                                    Distribution='all',
                                    Architectures=['amd64'],
-                                   Signing={"Skip": 1},
+                                   Signing={"Skip": 1})
         assert_equals(publish['Sources'][0]['Name'], self.repo_name)
 
     def test_2_get_publish(self):
