@@ -239,3 +239,7 @@ class Test_upload_files(AptlyTestCase):
         rm_dir = self.api.delete_dir(self.upload_dir)
         assert_true(not bool(rm_dir))
 
+
+def test_Aptly():
+    api = pyptly.Aptly('127.0.0.1:8080')
+    assert_equals(api.host, 'http://' + '127.0.0.1:8080')
