@@ -446,7 +446,7 @@ class Aptly(object):
         if kwargs:
             params.update(kwargs)
 
-        request = requests.get('{0}/{1}'.format(self.api_url['snapshots'],
+        request = requests.delete('{0}/{1}'.format(self.api_url['snapshots'],
                                                 snap_name),
                                headers=self.headers, params=params,
                                verify=self.verify_ssl)

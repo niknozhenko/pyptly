@@ -116,8 +116,8 @@ class Test_snapshots(AptlyTestCase):
 
     def test_1_create_snapshot_from_repo(self):
         snap = self.api.create_snapshot_from_repo(self.repo_name,
-                                                  Name=self.snapshot_name)
-        assert_equals(snap['Name'], self.snapshot_name)
+                                                  Name=self.snapshot_name1)
+        assert_equals(snap['Name'], self.snapshot_name1)
         assert_in('CreatedAt', snap)
 
     def test_2_get_snapshots(self):
@@ -128,19 +128,19 @@ class Test_snapshots(AptlyTestCase):
 
     def test_3_update_snapshot(self):
         snap_upd = self.api.update_snapshot(
-                                    self.snapshot_name,
+                                    self.snapshot_name1,
                                     Description=self.snapshot_description)
         assert_equals(snap_upd['Description'], self.snapshot_description)
 
 
     def test_4_show_snapshot(self):
-        snap_info = self.api.show_snapshot(self.snapshot_name)
-        assert_equals(snap_info['Name'], self.snapshot_name)
+        snap_info = self.api.show_snapshot(self.snapshot_name1)
+        assert_equals(snap_info['Name'], self.snapshot_name1)
 
 
     def test_5_delete_snapshot(self):
-        snap_delete = self.api.delete_snapshot(self.snapshot_name)
-        assert_true(not bool(snap_delete))
+        snap_delete = self.api.delete_snapshot(self.snapshot_name1)
+        assert_equals(snap_delete, {})
 
 
 
