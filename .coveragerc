@@ -1,5 +1,5 @@
 [run]
-source = pyptly
+source = pyptly/pyptly
 
 [report]
 omit =
