@@ -136,7 +136,8 @@ class Test_publish(AptlyTestCase):
 
     def test_4_delete_publish(self):
         del_publish = self.api.delete_publish(self.publish_distr,
-                                              prefix=self.prefix)
+                                              prefix=self.prefix,
+                                              force=1)
         assert_equals(del_publish, {})
 
 
