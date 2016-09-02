@@ -51,3 +51,4 @@ class AptlyTestCase(unittest.TestCase):
     snapshot_name1 = 'snap-test1'
     snapshot_name2 = 'snap-test2'
     snapshot_description = 'test description'
+    publish_distr = 'jessie'

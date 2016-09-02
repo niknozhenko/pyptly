@@ -117,7 +117,7 @@ class Test_publish(AptlyTestCase):
     def test_1_publish(self):
         publish = self.api.publish(SourceKind='local',
                                    Sources=[{'Name': self.repo_name}],
-                                   Distribution='all',
+                                   Distribution=self.publish_distr,
                                    Architectures=['amd64'],
                                    Signing={"Skip": True})
         assert_equals(publish['Sources'][0]['Name'], self.repo_name)
@@ -125,6 +125,10 @@ class Test_publish(AptlyTestCase):
     def test_2_get_publish(self):
         publish = self.api.get_publish()
         assert_is_instance(publish, list)
+
+    def test_3_update_publish(self):
+        upd_publish = self.api.update_publish(self.publish_distr)
+        assert_equals(upd_publish['Distribution'], self.publish_distr)
 
 
 class Test_snapshots(AptlyTestCase):
