@@ -115,9 +115,13 @@ class Test_publish(AptlyTestCase):
         cls.api.delete_local_repo(cls.repo_name, force=1)
 
     def test_1_publish(self):
-        publish = self.api.publish(SourceKind='local', Sources=self.repo_name,
+        publish = self.api.publish(SourceKind='local',
+                                   Sources=[{'Name': self.repo_name}],
                                    Architectures=['amd64'])
         assert_equals(publish['Sources'][0]['Name'], self.repo_name)
+
+#    def test_2_get_publish():
+#        publish = self.api.get_publish()
 
 
 class Test_snapshots(AptlyTestCase):
