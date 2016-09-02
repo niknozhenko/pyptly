@@ -9,8 +9,8 @@ class Aptly(object):
     def __init__(self, host, user=None, password=None, verify_ssl=True):
         self.headers = {}
         if user and password:
-            self.headers['Authorization'] = 'Basic ' + b64encode(user + ':'
-                                                                 + password)
+            self.headers['Authorization'] = b'Basic ' + b64encode(
+                                str.encode(user) + b':' + str.encode(password))
         if not host:
             raise ValueError('host argument may not be empty')
         self.host = host.rstrip('/')

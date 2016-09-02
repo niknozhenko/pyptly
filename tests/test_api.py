@@ -2,7 +2,7 @@ import pyptly
 import os
 import six
 from .conf import (AptlyTestCase, assert_is_instance, assert_equals,
-                   assert_in, assert_true)
+                   assert_in, assert_true, assert_raises)
 
 
 class Test_local_repo_methods(AptlyTestCase):
@@ -244,3 +244,4 @@ def test_Aptly():
     api = pyptly.Aptly('127.0.0.1:8080', user='user', password='password')
     assert_equals(api.host, 'http://' + '127.0.0.1:8080')
     assert_is_instance(api.headers['Authorization'], six.string_types)
+    assert_raises(ValueError, pyptly.Aptly)
