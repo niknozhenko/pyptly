@@ -181,7 +181,7 @@ class Test_snapshots(AptlyTestCase):
 
     def test_5_create_snapshot_from_pkg(self):
         repo_pkgs = self.api.show_repo_packages(self.repo_name)
-        create_snap = self.api.create_snapshot_from_pkg(self.snapshot_name2,
+        create_snap = self.api.create_snapshot_from_pkg(Name=self.snapshot_name2,
                                                         PackageRefs=repo_pkgs)
         assert_equals(create_snap['Name'], self.snapshot_name2)
 
