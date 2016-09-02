@@ -18,14 +18,12 @@ addons:
     packages:
      - aptly
      - graphviz
-     - rng-tools
 
 install:
   - pip install -r requirements.txt -r test_requirements.txt
   - pip install coveralls
 
 before_script:
-  - sudo rngd -r /dev/urandom
   - sudo aptly api serve -no-lock=true -listen "127.0.0.1:8080" &
 
 script:
