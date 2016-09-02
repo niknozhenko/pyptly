@@ -121,7 +121,7 @@ class Test_publish(AptlyTestCase):
 #                                   Architectures=['amd64'])
 #        assert_equals(publish['Sources'][0]['Name'], self.repo_name)
 
-    def test_2_get_publish():
+    def test_2_get_publish(self):
         publish = self.api.get_publish()
         assert_equals(publish, [])
 
