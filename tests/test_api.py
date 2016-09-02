@@ -127,7 +127,8 @@ class Test_publish(AptlyTestCase):
         assert_is_instance(publish, list)
 
     def test_3_update_publish(self):
-        upd_publish = self.api.update_publish(self.publish_distr)
+        upd_publish = self.api.update_publish(self.publish_distr,
+                                              Signing={"Skip": True})
         assert_equals(upd_publish['Distribution'], self.publish_distr)
 
 
