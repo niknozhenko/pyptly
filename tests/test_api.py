@@ -116,8 +116,8 @@ class Test_snapshots(AptlyTestCase):
 
     def test_1_create_snapshot_from_repo(self):
         snap = self.api.create_snapshot_from_repo(self.repo_name,
-                                                   Name=self.snapshot_name)
-        assert_in('Name', snap)
+                                                  Name=self.snapshot_name)
+        assert_equals(snap['Name'], self.repo_name)
         assert_in('CreatedAt', snap)
 
     def test_2_get_snapshots(self):
