@@ -98,7 +98,7 @@ class Test_package_api(AptlyTestCase):
         repo_info = self.api.show_local_repo(self.repo_name) 
         del_pkg = self.api.delete_pkg_bykey(self.repo_name,
                                             PackageRefs=[repo_pkgs[0]])
-#        assert_equals(repo_info, del_pkg)
+        assert_equals(repo_info, del_pkg)
 
 
 class Test_snapshots(AptlyTestCase):
@@ -126,7 +126,11 @@ class Test_snapshots(AptlyTestCase):
         assert_in('CreatedAt', snaps[0])
 
 
-    def test_3_update_snapshot(
+    def test_3_update_snapshot(self):
+        snap_upd = self.api.update_snapshot(
+                                    self.snapshot_name,
+                                    Description=self.snapshot_description)
+        assert_equals(snap_upd['Description'], self.snapshot_description)
 
 
 class Test_upload_files(AptlyTestCase):
