@@ -70,7 +70,7 @@ class Test_package_api(AptlyTestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.api.delete_local_repo(cls.repo_name)
+        cls.api.delete_local_repo(cls.repo_name, force=1)
 
     def test_1_add_uploaded_pkg(self):
         added_pkg = self.api.add_uploaded_pkg(
@@ -112,7 +112,7 @@ class Test_snapshots(AptlyTestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.api.delete_local_repo(cls.repo_name)
+        cls.api.delete_local_repo(cls.repo_name, force=1)
 
     def test_1_create_snapshot_from_repo(self):
         snap = self.api.create_snapshot_from_repo(self.repo_name,
@@ -134,7 +134,7 @@ class Test_upload_files(AptlyTestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.api.delete_local_repo(cls.repo_name)
+        cls.api.delete_local_repo(cls.repo_name, force=1)
 
     def test_1_get_dirs(self):
         dirs = self.api.get_dirs()
