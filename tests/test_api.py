@@ -124,7 +124,7 @@ class Test_publish(AptlyTestCase):
 
     def test_2_get_publish(self):
         publish = self.api.get_publish()
-        assert_equals(publish, [])
+        assert_is_instance(publish, list)
 
 
 class Test_snapshots(AptlyTestCase):
