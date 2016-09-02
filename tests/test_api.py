@@ -180,7 +180,12 @@ class Test_snapshots(AptlyTestCase):
                                             self.snapshot_name2)
         assert_equals(snap_diff, [])
 
-    def test_6_delete_snapshot(self):
+    def test_6_show_snapshot_packages(self):
+        snap_pkgs = self.api.show_snapshot_packages(self.snapshot_name1,
+                                                    format='details')
+        assert_is_instance(snap_pkgs, list)
+
+    def test_7_delete_snapshot(self):
         snap_delete1 = self.api.delete_snapshot(self.snapshot_name1)
         snap_delete2 = self.api.delete_snapshot(self.snapshot_name2)
         assert_equals(snap_delete1, {})
