@@ -75,7 +75,8 @@ class Test_package_api(AptlyTestCase):
     def test_1_add_uploaded_pkg(self):
         added_pkg = self.api.add_uploaded_pkg(
                                     self.repo_name, self.upload_dir,
-                                    filename=os.path.basename(self.test_pkg1))
+                                    filename=os.path.basename(self.test_pkg1),
+                                    forceReplace=1)
         assert_true(not bool(added_pkg['FailedFiles']))
         added_pkgs = self.api.add_uploaded_pkg(self.repo_name, self.upload_dir)
         assert_true(not bool(added_pkgs['FailedFiles']))
