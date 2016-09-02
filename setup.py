@@ -19,7 +19,7 @@ setup(name="pyptly",
       install_requires=reqs,
       keywords="aptly library",
       classifiers=[
-          'Development Status :: 3 - Alpha',
+          'Development Status :: 4 - Beta',
           'Topic :: Software Development :: Libraries',
           'License :: OSI Approved :: MIT License',
           'Operating System :: OS Independent',
