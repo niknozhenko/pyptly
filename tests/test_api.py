@@ -92,7 +92,7 @@ class Test_package_api(AptlyTestCase):
         assert_in('ShortKey', pkg)
 
     def test_4_show_pkg_bykey(self):
-        repo_info = self.create_local_repo('test_repo2')
+        repo_info = self.api.create_local_repo('test_repo2')
         repo_pkgs = self.api.show_repo_packages(self.repo_name)
         add_pkg = self.api.add_pkg_bykey('test_repo2', PackageRefs=repo_pkgs)
         assert_equals(repo_info, add_pkg)
