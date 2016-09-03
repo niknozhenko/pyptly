@@ -1,33 +1,39 @@
 sudo: required
-
 language: python
-
 python:
 - '2.6'
 - '2.7'
 - '3.3'
 - '3.4'
 - '3.5'
-
 addons:
   apt:
     sources:
-     - deadsnakes
-     - sourceline: 'deb http://repo.aptly.info/ squeeze main'
-       key_url: 'https://www.aptly.info/pubkey.txt'
+    - deadsnakes
+    - sourceline: deb http://repo.aptly.info/ squeeze main
+      key_url: https://www.aptly.info/pubkey.txt
     packages:
-     - aptly
-     - graphviz
-
+    - aptly
+    - graphviz
 install:
-  - pip install -r requirements.txt -r test_requirements.txt
-  - pip install coveralls
-
+- pip install -r requirements.txt -r test_requirements.txt
+- pip install coveralls
 before_script:
-  - sudo aptly api serve -no-lock=true -listen "127.0.0.1:8080" &
-
+- sudo aptly api serve -no-lock=true -listen "127.0.0.1:8080" &
 script:
-  - nosetests -v --with-coverage -c tests/travis-tests.cfg
-
+- nosetests -v --with-coverage -c tests/travis-tests.cfg
 after_success:
-  - coveralls
+- coveralls
+before_deploy:
+- pip install twine
+deploy:
+  provider: pypi
+  user: repelista
+  password:
+    secure: ddnhBSkFVONK1OOfs1noFg7acgNKJAOtI2vOexO3twNwSjkPB1xxFPRkzb0qbFvqJ0xRTPb889UxNvE3Gv+AbsweEQPr2OO1m6Qj41wtYfKnQixI5Q9vZdF6LR63GgHL+oiJYCfaQ2KZZBcQFBiQ8altkjUDpQ4VAWH3lcWcDkPwPQJ96IOJjQUU2UkcDVC4fys62axSGPvP17LMj48zf+P5IOqNcZ6soGFbcdSJ6YcGX+nYcv12LQmgzC59LIVorvocUvHr01ftvMuhgRe7XxDc5ABDM7rFf4idDeM60Nhf5Vlof0zmw8c5cX6Lumt2CucKOqXzr75sxKx+Nv4dEyX9u5kra0rdvFnYlRMs00Q7eb9hzgHFZh8fP/kxjnOcgxccuE8IbmVmG5pbu3lG7P4NtWBXp3d9HqtbkF4T4trsdQa/QIoEjLvSNKnS2RRqde3E326kO+I2nUGy+/yw+AvGCiiIOFr3+gNLYrpc4o21K6QP6299QJutuIQu64oisVqf84qgxCgOQPuXaFqJuLN2WhA5OpuoXP+MSOYiEtHksLwgUx3yY6pwYpeDbjA8XaWoodaAIDzmFQm3Hnl1FUxZK4JcOatto8GA1m2bnQhkFSJxnW3087GbfoxU4NAhQn0CpdjFFEjD9gffoX3BGNQidgGF9LVrT6/4rXpk1o8=
+  distributions: sdist bdist_wheel
+  on:
+    repo: repelista/pyptly
+    tags: true
+matrix:
+  fast_finish: true
