@@ -7,7 +7,7 @@ class Aptly(object):
     """Aptly class"""
 
     def __init__(self, host, user=None, password=None, verify_ssl=True,
-                 timeout = 30):
+                 timeout = 90):
         self.timeout = timeout
         self.headers = {}
         if user and password:
