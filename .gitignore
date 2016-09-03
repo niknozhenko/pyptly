@@ -1,6 +1,7 @@
 *.py[cod]
 __pycache__
 .coverage
+.pybuild/
 .tox
 build/
 dist/
