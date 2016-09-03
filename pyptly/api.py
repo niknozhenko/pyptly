@@ -142,6 +142,7 @@ class Aptly(object):
 
         :param name: name of the local repository
         :param dirname: directory with uploaded packages to import
+        :param filename: name of the file to add
         :param **kwargs: all parameters allowed by Aptly API
         """
 
@@ -246,7 +247,7 @@ class Aptly(object):
     def get_files(self, dirname):
         """Returns list of files in directory
 
-        :param dir: directory name to inspect
+        :param dirname: directory name to inspect
         """
         request = requests.get('{0}/{1}'.format(self.api_url['files'],
                                                 dirname),
@@ -259,7 +260,7 @@ class Aptly(object):
     def delete_dir(self, dirname):
         """Deletes all files in upload directory and directory itself
 
-        :param dir: directory name to delete
+        :param dirname: directory name to delete
         """
         request = requests.delete('{0}/{1}'.format(self.api_url['files'],
                                                    dirname),
@@ -272,8 +273,8 @@ class Aptly(object):
     def delete_file(self, dirname, filename):
         """Delete single file in directory
 
-        :param dir: directory to delete from
-        :param file: file to delete
+        :param dirname: directory to delete from
+        :param filename: file to delete
         """
         request = requests.delete('{0}/{1}/{2}'.format(self.api_url['files'],
                                                        dirname, filename),
@@ -291,7 +292,7 @@ class Aptly(object):
         preserve filenames. No check is performed if existing uploaded
         would be overwritten.
 
-        :param dir: upload directory name
+        :param dirname: upload directory name
         :param files: files to upload. Single file path or list of pathes.
         """
         if isinstance(files, list):
