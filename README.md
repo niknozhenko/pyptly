@@ -17,3 +17,9 @@ Or you may use git to clone the repository from
 Github and install it manually:
 
      python setup.py install
+
+### Basic Usage:
+
+    api = pyptly.Aptly("http://127.0.0.1:8080")
+    api.aptly_version()
+    {u'Version': u'0.9.7'}
