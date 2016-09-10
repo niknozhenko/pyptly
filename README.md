@@ -18,7 +18,7 @@ Github and install it manually:
 
      python setup.py install
 
-### To build debian package run:
+To build debian package run:
      dpkg-buildpackage -us -uc
 
 ### Basic Usage:
