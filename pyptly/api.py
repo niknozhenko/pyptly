@@ -49,12 +49,7 @@ class Aptly(object):
         """Show list of currently available local repositories.
         Each repository is returned as in "show" API
         """
-        request = requests.get("{0}".format(self.api_url['repos']),
-                               timeout=self.timeout,
-                               headers=self.headers,
-                               auth=self.auth,
-                               verify=self.verify_ssl)
-        return response(request)
+        return self._call("{0}".format(self.api_url['repos']), 'GET')
 
 
     def create_local_repo(self, name, **kwargs):
