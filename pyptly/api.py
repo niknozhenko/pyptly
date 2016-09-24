@@ -26,6 +26,25 @@ class Aptly(object):
         self.verify_ssl = verify_ssl
 
 
+    def _call(self, url, verb, headers=None, params=None, data=None):
+        """ Api call wrappers
+        """
+        verb_map = {'GET': requests.get,
+                    'POST': requests.post,
+                    'PUT': requests.put,
+                    'DELETE': requests.delete}
+
+        request = verb_map[verb](url,
+                                 headers=headers,
+                                 params=params,
+                                 data=data,
+                                 verify=self.verify_ssl,
+                                 auth=self.auth
+                                 timeout=self.timeout)
+
+        return response(request)
+
+
     def get_local_repos(self):
         """Show list of currently available local repositories.
         Each repository is returned as in "show" API
