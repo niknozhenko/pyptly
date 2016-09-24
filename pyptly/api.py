@@ -3,7 +3,7 @@ import requests
 from pyptly.utils import prefix_sanitized, response
 
 class Aptly(object):
-    """Aptly class"""
+    "Aptly class"
 
     def __init__(self, host, auth=None, verify_ssl=True, timeout=None):
         self.timeout = timeout
@@ -27,8 +27,8 @@ class Aptly(object):
 
 
     def _call(self, url, verb, headers=None, params=None, data=None):
-        """ Api call wrappers
-        """
+        "Api call wrapper"
+
         verb_map = {'GET': requests.get,
                     'POST': requests.post,
                     'PUT': requests.put,
@@ -39,7 +39,7 @@ class Aptly(object):
                                  params=params,
                                  data=data,
                                  verify=self.verify_ssl,
-                                 auth=self.auth
+                                 auth=self.auth,
                                  timeout=self.timeout)
 
         return response(request)
