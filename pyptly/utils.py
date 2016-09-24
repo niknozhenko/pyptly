@@ -20,7 +20,7 @@ def prefix_sanitized(prefix):
 
 
 def response(request, meta_msg=None):
-    """API respose wrapper
+    """API response wrapper
     """
     meta_msg = meta_msg if meta_msg else u'Operation aborted'
     try:
