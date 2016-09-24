@@ -24,6 +24,10 @@ To build debian package run:
 
 ### Basic Usage:
 
-    api = pyptly.Aptly("http://127.0.0.1:8080")
+    import pyptly
+    from requests.auth import HTTPBasicAuth
+
+    auth = HTTPBasicAuth('user', 'pass')
+    api = pyptly.Aptly('http://127.0.0.1:8080', auth=auth)
     api.aptly_version()
     {u'Version': u'0.9.7'}

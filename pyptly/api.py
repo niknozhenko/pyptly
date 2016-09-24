@@ -1,18 +1,14 @@
 import json
 import requests
-from base64 import b64encode
 from pyptly.utils import prefix_sanitized, response
 
 class Aptly(object):
     """Aptly class"""
 
-    def __init__(self, host, user=None, password=None, verify_ssl=True,
-                 timeout = 90):
+    def __init__(self, host, auth=None, verify_ssl=True, timeout=None):
         self.timeout = timeout
         self.headers = {}
-        if user and password:
-            self.headers['Authorization'] = b'Basic ' + b64encode(
-                                str.encode(user) + b':' + str.encode(password))
+        self.auth = auth
         if not host:
             raise ValueError('host argument may not be empty')
         self.host = host.rstrip('/')
@@ -37,6 +33,7 @@ class Aptly(object):
         request = requests.get("{0}".format(self.api_url['repos']),
                                timeout=self.timeout,
                                headers=self.headers,
+                               auth=self.auth,
                                verify=self.verify_ssl)
         return response(request)
 
@@ -55,6 +52,7 @@ class Aptly(object):
         request = requests.post("{0}".format(self.api_url['repos']),
                                 data=json.dumps(data),
                                 headers=headers,
+                                auth=self.auth,
                                 timeout=self.timeout,
                                 verify=self.verify_ssl)
         return response(request)
@@ -67,6 +65,7 @@ class Aptly(object):
         request = requests.get("{0}/{1}".format(self.api_url['repos'], name),
                                headers=self.headers,
                                timeout=self.timeout,
+                               auth=self.auth,
                                verify=self.verify_ssl)
         return response(request)
 
@@ -86,6 +85,7 @@ class Aptly(object):
                                timeout=self.timeout,
                                params=params,
                                headers=self.headers,
+                               auth=self.auth,
                                verify=self.verify_ssl)
         return response(request)
 
@@ -105,6 +105,7 @@ class Aptly(object):
                                data=json.dumps(data),
                                headers=headers,
                                timeout=self.timeout,
+                               auth=self.auth,
                                verify=self.verify_ssl)
         return response(request)
 
@@ -125,6 +126,7 @@ class Aptly(object):
         request = requests.delete('{0}/{1}'.format(self.api_url['repos'],
                                                    name),
                                   headers=self.headers,
+                                  auth=self.auth,
                                   verify=self.verify_ssl,
                                   timeout=self.timeout,
                                   params=params)
@@ -157,12 +159,14 @@ class Aptly(object):
                                                     name, dirname, filename),
                                     timeout=self.timeout,
                                     headers=self.headers,
+                                    auth=self.auth,
                                     verify=self.verify_ssl, params=params)
         else:
             request = requests.post('{0}/{1}/file/{2}'.format(
                                                     self.api_url['repos'],
                                                     name, dirname),
                                     headers=self.headers,
+                                    auth=self.auth,
                                     verify=self.verify_ssl, params=params)
         return response(request)
 
@@ -191,6 +195,7 @@ class Aptly(object):
                                                           name),
                                 data=json.dumps(data),
                                 headers=headers,
+                                auth=self.auth,
                                 timeout=self.timeout,
                                 verify=self.verify_ssl)
         return response(request)
@@ -215,6 +220,7 @@ class Aptly(object):
                                   self.api_url['repos'], name),
                                   data=json.dumps(data),
                                   headers=headers,
+                                  auth=self.auth,
                                   timeout=self.timeout,
                                   verify=self.verify_ssl)
         return response(request)
@@ -230,6 +236,7 @@ class Aptly(object):
         request = requests.get('{0}/{1}'.format(self.api_url['packages'],
                                                 key),
                                headers=self.headers,
+                               auth=self.auth,
                                timeout=self.timeout,
                                verify=self.verify_ssl)
         return response(request)
@@ -239,6 +246,7 @@ class Aptly(object):
         """List all directories"""
         request = requests.get('{0}'.format(self.api_url['files']),
                                headers=self.headers,
+                               auth=self.auth,
                                timeout=self.timeout,
                                verify=self.verify_ssl)
         return response(request)
@@ -252,6 +260,7 @@ class Aptly(object):
         request = requests.get('{0}/{1}'.format(self.api_url['files'],
                                                 dirname),
                                headers=self.headers,
+                               auth=self.auth,
                                timeout=self.timeout,
                                verify=self.verify_ssl)
         return response(request)
@@ -265,6 +274,7 @@ class Aptly(object):
         request = requests.delete('{0}/{1}'.format(self.api_url['files'],
                                                    dirname),
                                   headers=self.headers,
+                                  auth=self.auth,
                                   timeout=self.timeout,
                                   verify=self.verify_ssl)
         return response(request)
@@ -279,6 +289,7 @@ class Aptly(object):
         request = requests.delete('{0}/{1}/{2}'.format(self.api_url['files'],
                                                        dirname, filename),
                                   headers=self.headers,
+                                  auth=self.auth,
                                   timeout=self.timeout,
                                   verify=self.verify_ssl)
         return response(request)
@@ -304,6 +315,7 @@ class Aptly(object):
                                                  dirname),
                                 files=files,
                                 headers=self.headers,
+                                auth=self.auth,
                                 timeout=self.timeout,
                                 verify=self.verify_ssl)
         return response(request)
@@ -313,6 +325,7 @@ class Aptly(object):
         """List published repositories"""
         request = requests.get('{0}'.format(self.api_url['publish']),
                                headers=self.headers,
+                               auth=self.auth,
                                timeout=self.timeout,
                                verify=self.verify_ssl)
         return response(request)
@@ -333,6 +346,7 @@ class Aptly(object):
         request = requests.post('{0}/{1}'.format(self.api_url['publish'],
                                                  prefix if prefix else ''),
                                 headers=headers,
+                                auth=self.auth,
                                 timeout=self.timeout,
                                 data=json.dumps(data),
                                 verify=self.verify_ssl)
@@ -362,6 +376,7 @@ class Aptly(object):
                                                     distr),
                                timeout=self.timeout,
                                headers=headers,
+                               auth=self.auth,
                                verify=self.verify_ssl,
                                data=json.dumps(data))
         return response(request)
@@ -387,6 +402,7 @@ class Aptly(object):
                                   params=params,
                                   timeout=self.timeout,
                                   headers=self.headers,
+                                  auth=self.auth,
                                   verify=self.verify_ssl)
         return response(request)
 
@@ -402,6 +418,7 @@ class Aptly(object):
 
         request = requests.get('{0}'.format(self.api_url['snapshots']),
                                headers=self.headers,
+                               auth=self.auth,
                                params=params,
                                timeout=self.timeout,
                                verify=self.verify_ssl)
@@ -422,6 +439,7 @@ class Aptly(object):
         request = requests.post('{0}/{1}/snapshots'.format(self.api_url['repos'],
                                                            rep_name),
                                 headers=headers,
+                                auth=self.auth,
                                 verify=self.verify_ssl,
                                 timeout=self.timeout,
                                 data=json.dumps(data))
@@ -444,6 +462,7 @@ class Aptly(object):
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
         request = requests.post('{0}'.format(self.api_url['snapshots']),
                                 headers=headers,
+                                auth=self.auth,
                                 verify=self.verify_ssl,
                                 timeout=self.timeout,
                                 data=json.dumps(kwargs))
@@ -463,6 +482,7 @@ class Aptly(object):
         request = requests.put('{0}/{1}'.format(self.api_url['snapshots'],
                                                 snap_name),
                                headers=headers,
+                               auth=self.auth,
                                verify=self.verify_ssl,
                                timeout=self.timeout,
                                data=json.dumps(data))
@@ -474,6 +494,7 @@ class Aptly(object):
         request = requests.get('{0}/{1}'.format(self.api_url['snapshots'],
                                                 snap_name),
                                headers=self.headers,
+                               auth=self.auth,
                                timeout=self.timeout,
                                verify=self.verify_ssl)
         return response(request)
@@ -494,6 +515,7 @@ class Aptly(object):
         request = requests.delete('{0}/{1}'.format(self.api_url['snapshots'],
                                                 snap_name),
                                headers=self.headers,
+                               auth=self.auth,
                                params=params,
                                timeout=self.timeout,
                                verify=self.verify_ssl)
@@ -514,6 +536,7 @@ class Aptly(object):
                                self.api_url['snapshots'], snap_name),
                                params=params,
                                headers=self.headers,
+                               auth=self.auth,
                                timeout=self.timeout,
                                verify=self.verify_ssl)
         return response(request)
@@ -527,6 +550,7 @@ class Aptly(object):
                                self.api_url['snapshots'], snapshot1,
                                snapshot2),
                                headers=self.headers,
+                               auth=self.auth,
                                timeout=self.timeout,
                                verify=self.verify_ssl)
         return response(request)
@@ -536,6 +560,7 @@ class Aptly(object):
         """Return current aptly version"""
         request = requests.get('{0}/version'.format(self.api),
                                headers=self.headers,
+                               auth=self.auth,
                                timeout=self.timeout,
                                verify=self.verify_ssl)
         return response(request)
@@ -551,6 +576,7 @@ class Aptly(object):
         path = path if path else 'graph.' + ext
         request = requests.get('{0}/graph.{1}'.format(self.api, ext),
                                headers=self.headers,
+                               auth=self.auth,
                                timeout=self.timeout,
                                verify=self.verify_ssl)
         if request.status_code == 200:
