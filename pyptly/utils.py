@@ -1,3 +1,9 @@
+"""
+pyptly.utils
+-----------
+
+Miscellaneous module tools
+"""
 import re
 
 def prefix_sanitized(prefix):
