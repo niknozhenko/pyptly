@@ -35,6 +35,7 @@ class Aptly(object):
                     'PUT': requests.put,
                     'DELETE': requests.delete}
 
+        headers = headers if headers else self.headers
         request = verb_map[verb](url,
                                  headers=headers,
                                  params=params,
