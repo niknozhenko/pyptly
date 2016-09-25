@@ -58,7 +58,10 @@ class Aptly(object):
         """Show list of currently available local repositories.
         Each repository is returned as in "show" API
         """
-        return self._call('{0}'.format(self.api_url['repos']), 'GET')
+        return self._call(
+            '{0}'.format(self.api_url['repos']),
+            'GET'
+        )
 
 
     def create_local_repo(self, name, **kwargs):
@@ -72,18 +75,22 @@ class Aptly(object):
         if kwargs:
             data.update(kwargs)
 
-        return self._call('{0}'.format(self.api_url['repos']),
-                          'POST',
-                          data=json.dumps(data),
-                          headers=headers)
+        return self._call(
+            '{0}'.format(self.api_url['repos']),
+            'POST',
+            data=json.dumps(data),
+            headers=headers
+        )
 
 
     def show_local_repo(self, name):
         """Returns basic information about local repository
         :param name: name of the new local repository
         """
-        return self._call('{0}/{1}'.format(self.api_url['repos'], name),
-                          'GET')
+        return self._call(
+            '{0}/{1}'.format(self.api_url['repos'], name),
+            'GET'
+        )
 
 
     def show_repo_packages(self, name, **kwargs):
@@ -96,10 +103,11 @@ class Aptly(object):
         if kwargs:
             params.update(kwargs)
 
-        return self._call('{0}/{1}/packages'.format(self.api_url['repos'],
-                                                    name),
-                          'GET',
-                          params=params)
+        return self._call(
+            '{0}/{1}/packages'.format(self.api_url['repos'], name),
+            'GET',
+            params=params
+        )
 
 
     def edit_local_repo(self, name, **kwargs):
@@ -113,10 +121,12 @@ class Aptly(object):
         if kwargs:
             data.update(kwargs)
 
-        return self._call('{0}/{1}'.format(self.api_url['repos'], name),
-                          'PUT',
-                          data=json.dumps(data),
-                          headers=headers)
+        return self._call(
+            '{0}/{1}'.format(self.api_url['repos'], name),
+            'PUT',
+            data=json.dumps(data),
+            headers=headers
+        )
 
 
     def delete_local_repo(self, name, **kwargs):
@@ -132,10 +142,11 @@ class Aptly(object):
         if kwargs:
             params.update(kwargs)
 
-        return self._call('{0}/{1}'.format(self.api_url['repos'],
-                                           name),
-                          'DELETE',
-                          params=params)
+        return self._call(
+            '{0}/{1}'.format(self.api_url['repos'], name),
+            'DELETE',
+            params=params
+        )
 
 
     def add_uploaded_pkg(self, name, dirname, **kwargs):
@@ -159,16 +170,19 @@ class Aptly(object):
             params.update(kwargs)
 
         if filename:
-            return self._call('{0}/{1}/file/{2}/{3}'.format(
-                                                    self.api_url['repos'],
-                                                    name, dirname, filename),
-                              'POST',
-                              params=params)
+            return self._call(
+                '{0}/{1}/file/{2}/{3}'.format(self.api_url['repos'], name,
+                                              dirname, filename),
+                'POST',
+                params=params
+            )
         else:
-            return self._call('{0}/{1}/file/{2}'.format(self.api_url['repos'],
-                                                        name, dirname),
-                              'POST',
-                              params=params)
+            return self._call(
+                '{0}/{1}/file/{2}'.format(self.api_url['repos'],
+                                          name, dirname),
+                'POST',
+                params=params
+            )
 
 
     def add_pkg_bykey(self, name, **kwargs):
@@ -191,11 +205,12 @@ class Aptly(object):
         if kwargs:
             data.update(kwargs)
 
-        return self._call('{0}/{1}/packages'.format(self.api_url['repos'],
-                                                    name),
-                          'POST',
-                          data=json.dumps(data),
-                          headers=headers)
+        return self._call(
+            '{0}/{1}/packages'.format(self.api_url['repos'], name),
+            'POST',
+            data=json.dumps(data),
+            headers=headers
+        )
 
 
     def delete_pkg_bykey(self, name, **kwargs):
@@ -213,11 +228,12 @@ class Aptly(object):
         if kwargs:
             data.update(kwargs)
 
-        return self._call('{0}/{1}/packages'.format(self.api_url['repos'],
-                                                    name),
-                          'DELETE',
-                          data=json.dumps(data),
-                          headers=headers)
+        return self._call(
+            '{0}/{1}/packages'.format(self.api_url['repos'], name),
+            'DELETE',
+            data=json.dumps(data),
+            headers=headers
+        )
 
 
     def show_pkg_bykey(self, key):
@@ -227,13 +243,18 @@ class Aptly(object):
 
         :param key: package key
         """
-        return self._call('{0}/{1}'.format(self.api_url['packages'], key),
-                          'GET')
+        return self._call(
+            '{0}/{1}'.format(self.api_url['packages'], key),
+            'GET'
+        )
 
 
     def get_dirs(self):
         """List all directories"""
-        return self._call('{0}'.format(self.api_url['files']), 'GET')
+        return self._call(
+            '{0}'.format(self.api_url['files']),
+            'GET'
+        )
 
 
     def get_files(self, dirname):
@@ -241,8 +262,10 @@ class Aptly(object):
 
         :param dirname: directory name to inspect
         """
-        return self._call('{0}/{1}'.format(self.api_url['files'], dirname),
-                          'GET')
+        return self._call(
+            '{0}/{1}'.format(self.api_url['files'], dirname),
+            'GET'
+        )
 
 
     def delete_dir(self, dirname):
@@ -250,8 +273,10 @@ class Aptly(object):
 
         :param dirname: directory name to delete
         """
-        return self._call('{0}/{1}'.format(self.api_url['files'], dirname),
-                          'DELETE')
+        return self._call(
+            '{0}/{1}'.format(self.api_url['files'], dirname),
+            'DELETE'
+        )
 
 
     def delete_file(self, dirname, filename):
@@ -260,9 +285,10 @@ class Aptly(object):
         :param dirname: directory to delete from
         :param filename: file to delete
         """
-        return self._call('{0}/{1}/{2}'.format(self.api_url['files'],
-                                               dirname, filename),
-                          'DELETE')
+        return self._call(
+            '{0}/{1}/{2}'.format(self.api_url['files'], dirname, filename),
+            'DELETE'
+        )
 
 
     def upload_files(self, dirname, files):
@@ -281,14 +307,19 @@ class Aptly(object):
         else:
             files = {'file': open(files, 'rb')}
 
-        return self._call('{0}/{1}'.format(self.api_url['files'], dirname),
-                          'POST',
-                          files=files)
+        return self._call(
+            '{0}/{1}'.format(self.api_url['files'], dirname),
+            'POST',
+            files=files
+        )
 
 
     def get_publish(self):
         """List published repositories"""
-        return self._call('{0}'.format(self.api_url['publish']), 'GET')
+        return self._call(
+            '{0}'.format(self.api_url['publish']),
+            'GET'
+        )
 
 
     def publish(self, **kwargs):
@@ -303,11 +334,12 @@ class Aptly(object):
 
         data = kwargs
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
-        return self._call('{0}/{1}'.format(self.api_url['publish'],
-                                           prefix if prefix else ''),
-                          'POST',
-                          headers=headers,
-                          data=json.dumps(data))
+        return self._call(
+            '{0}/{1}'.format(self.api_url['publish'], prefix if prefix else ''),
+            'POST',
+            headers=headers,
+            data=json.dumps(data)
+        )
 
 
     def update_publish(self, distr, **kwargs):
@@ -328,12 +360,13 @@ class Aptly(object):
             data.update(kwargs)
 
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
-        return self._call('{0}/{1}/{2}'.format(self.api_url['publish'],
-                                               prefix if prefix else '',
-                                               distr),
-                          'PUT',
-                          headers=headers,
-                          data=json.dumps(data))
+        return self._call(
+            '{0}/{1}/{2}'.format(self.api_url['publish'],
+                                 prefix if prefix else '', distr),
+            'PUT',
+            headers=headers,
+            data=json.dumps(data)
+        )
 
 
     def delete_publish(self, distr, **kwargs):
@@ -350,11 +383,13 @@ class Aptly(object):
         if kwargs:
             params.update(kwargs)
 
-        return self._call('{0}/{1}/{2}'.format(self.api_url['publish'],
-                                               prefix if prefix else '',
-                                               distr),
-                          'DELETE',
-                          params=params)
+        return self._call(
+            '{0}/{1}/{2}'.format(self.api_url['publish'],
+                                 prefix if prefix else '',
+                                 distr),
+            'DELETE',
+            params=params
+        )
 
 
     def get_snapshots(self, **kwargs):
@@ -366,9 +401,11 @@ class Aptly(object):
         if kwargs:
             params.update(kwargs)
 
-        return self._call('{0}'.format(self.api_url['snapshots']),
-                          'GET',
-                          params=params)
+        return self._call(
+            '{0}'.format(self.api_url['snapshots']),
+            'GET',
+            params=params
+        )
 
 
     def create_snapshot_from_repo(self, rep_name, **kwargs):
@@ -382,11 +419,12 @@ class Aptly(object):
             data.update(kwargs)
 
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
-        return self._call('{0}/{1}/snapshots'.format(self.api_url['repos'],
-                                                     rep_name),
-                          'POST',
-                          headers=headers,
-                          data=json.dumps(data))
+        return self._call(
+            '{0}/{1}/snapshots'.format(self.api_url['repos'], rep_name),
+            'POST',
+            headers=headers,
+            data=json.dumps(data)
+        )
 
 
     def create_snapshot_from_pkg(self, **kwargs):
@@ -403,10 +441,12 @@ class Aptly(object):
             data.update(kwargs)
 
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
-        return self._call('{0}'.format(self.api_url['snapshots']),
-                          'POST',
-                          headers=headers,
-                          data=json.dumps(kwargs))
+        return self._call(
+            '{0}'.format(self.api_url['snapshots']),
+            'POST',
+            headers=headers,
+            data=json.dumps(kwargs)
+        )
 
 
     def update_snapshot(self, snap_name, **kwargs):
@@ -419,18 +459,20 @@ class Aptly(object):
             data.update(kwargs)
 
         headers = dict({'Content-Type': 'application/json'}, **self.headers)
-        return self._call('{0}/{1}'.format(self.api_url['snapshots'],
-                                           snap_name),
-                          'PUT',
-                          headers=headers,
-                          data=json.dumps(data))
+        return self._call(
+            '{0}/{1}'.format(self.api_url['snapshots'], snap_name),
+            'PUT',
+            headers=headers,
+            data=json.dumps(data)
+        )
 
 
     def show_snapshot(self, snap_name):
         """Get information about snapshot by name"""
-        return self._call('{0}/{1}'.format(self.api_url['snapshots'],
-                                           snap_name),
-                          'GET')
+        return self._call(
+            '{0}/{1}'.format(self.api_url['snapshots'], snap_name),
+            'GET'
+        )
 
 
     def delete_snapshot(self, snap_name, **kwargs):
@@ -445,10 +487,11 @@ class Aptly(object):
         if kwargs:
             params.update(kwargs)
 
-        return self._call('{0}/{1}'.format(self.api_url['snapshots'],
-                                           snap_name),
-                          'DELETE',
-                          params=params)
+        return self._call(
+            '{0}/{1}'.format(self.api_url['snapshots'], snap_name),
+            'DELETE',
+            params=params
+        )
 
 
     def show_snapshot_packages(self, snap_name, **kwargs):
@@ -461,25 +504,30 @@ class Aptly(object):
         if kwargs:
             params.update(kwargs)
 
-        return self._call('{0}/{1}/packages'.format(self.api_url['snapshots'],
-                                                    snap_name),
-                          'GET',
-                          params=params)
+        return self._call(
+            '{0}/{1}/packages'.format(self.api_url['snapshots'], snap_name),
+            'GET',
+            params=params
+        )
 
 
     def snapshots_diff(self, snapshot1, snapshot2):
         """Calculate difference between two snapshots :snapshot1 (left)
         and :snapshot2 (right).
         """
-        return self._call('{0}/{1}/diff/{2}'.format(self.api_url['snapshots'],
-                                                    snapshot1,
-                                                    snapshot2),
-                          'GET')
+        return self._call(
+            '{0}/{1}/diff/{2}'.format(self.api_url['snapshots'],
+                                      snapshot1, snapshot2),
+            'GET'
+        )
 
 
     def aptly_version(self):
         """Return current aptly version"""
-        return self._call('{0}/version'.format(self.api), 'GET')
+        return self._call(
+            '{0}/version'.format(self.api),
+            'GET'
+        )
 
 
     def get_graph(self, path='', ext='png'):
