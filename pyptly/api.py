@@ -15,6 +15,8 @@ class Aptly(object):
         self.timeout = timeout
         self.headers = {}
         self.auth = auth
+        if not host:
+            raise ValueError('host argument may not be empty')
         self.host = host.rstrip('/')
         if self.host.startswith('http://') or self.host.startswith('https://'):
             pass
