@@ -247,4 +247,4 @@ class Test_upload_files(AptlyTestCase):
 def test_Aptly():
     api = pyptly.Aptly('127.0.0.1:8080')
     assert_equals(api.host, 'http://' + '127.0.0.1:8080')
-    assert_raises(ValueError, pyptly.Aptly, None, None)
+    assert_raises(TypeError, pyptly.Aptly, None, None)
