@@ -8,7 +8,7 @@ from .conf import (AptlyTestCase, assert_is_instance, assert_equals,
 class Test_local_repo_methods(AptlyTestCase):
 
     def test_get_local_repos(self):
-        repos = self.api.get_local_repos()
+        repos = self.api.get_local_repos
         assert_is_instance(repos, list)
 
     def test_1_create_local_repo(self):
@@ -50,7 +50,7 @@ class Test_local_repo_methods(AptlyTestCase):
 class Test_misc_methods(AptlyTestCase):
 
     def test_aptly_version(self):
-        version = self.api.aptly_version()
+        version = self.api.aptly_version
         assert_is_instance(version, dict)
         assert_is_instance(version['Version'], six.string_types)
 
@@ -129,7 +129,7 @@ class Test_publish(AptlyTestCase):
         assert_equals(publish['Sources'][0]['Name'], self.repo_name)
 
     def test_2_get_publish(self):
-        publish = self.api.get_publish()
+        publish = self.api.get_publish
         assert_is_instance(publish, list)
 
     def test_3_update_publish(self):
@@ -213,7 +213,7 @@ class Test_upload_files(AptlyTestCase):
         cls.api.delete_local_repo(cls.repo_name, force=1)
 
     def test_1_get_dirs(self):
-        dirs = self.api.get_dirs()
+        dirs = self.api.get_dirs
         assert_is_instance(dirs, list)
 
     def test_2_upload_files(self):
