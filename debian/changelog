@@ -1,3 +1,10 @@
+pyptly (1.0.2) testing; urgency=medium
+
+  * Implementation of properties.
+  * API call wrapper
+
+ -- Nikolai Nozhenko <nik.nozhenko@gmail.com>  Sun, 25 Sep 2016 17:04:13 +0300
+
 pyptly (1.0.1) testing; urgency=medium
 
   * use any valid external auth object for requests
