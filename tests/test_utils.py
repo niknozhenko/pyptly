@@ -39,6 +39,5 @@ def test_response():
     assert_is_instance(response(request), dict)
 
     request = requests.get('https://google.com')
-    msg = response(request, meta_msg='error')
-    assert_is_instance(msg, dict)
-    assert_equals(msg['meta'], 'error')
+    msg = response(request)
+    assert_is_instance(msg['error'], ValueError)
