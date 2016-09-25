@@ -32,8 +32,7 @@ class Aptly(object):
         self.verify_ssl = verify_ssl
 
 
-    def _call(self, url, verb, headers=None,
-              params=None, data=None, files=None):
+    def _call(self, url, verb, **kwargs):
         "Api call wrapper"
 
         verb_map = {'GET': requests.get,
@@ -41,15 +40,13 @@ class Aptly(object):
                     'PUT': requests.put,
                     'DELETE': requests.delete}
 
-        headers = headers if headers else self.headers
+        if 'headers' not in kwargs:
+            kwargs['headers'] = self.headers
         request = verb_map[verb](url,
-                                 headers=headers,
-                                 params=params,
-                                 data=data,
-                                 files=files,
                                  verify=self.verify_ssl,
                                  auth=self.auth,
-                                 timeout=self.timeout)
+                                 timeout=self.timeout,
+                                 **kwargs)
 
         return response(request)
 

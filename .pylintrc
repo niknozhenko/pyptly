@@ -8,7 +8,7 @@ output-format=colorized
 [DESIGN]
 
 # Maximum number of arguments for function / method
-max-args=8
+max-args=5
 
 # Minimum number of public methods for a class (see R0903).
 min-public-methods=2
