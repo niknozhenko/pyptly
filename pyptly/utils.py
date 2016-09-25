@@ -19,13 +19,11 @@ def prefix_sanitized(prefix):
     return prefix
 
 
-def response(request, meta_msg=None):
+def response(request):
     """API response wrapper
     """
-    meta_msg = meta_msg if meta_msg else u'Operation aborted'
     try:
         msg = request.json()
-    except ValueError:
-        msg = {u'meta': meta_msg,
-               u'error': u'response code - {0}'.format(request.status_code)}
+    except ValueError as err:
+        msg = {u'error': err}
     return msg

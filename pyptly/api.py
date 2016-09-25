@@ -4,7 +4,6 @@ pyptly.api
 
 This module provides an Aptly object to make API calls
 """
-
 import json
 import requests
 from pyptly.utils import prefix_sanitized, response
