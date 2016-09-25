@@ -51,6 +51,7 @@ class Aptly(object):
         return response(request)
 
 
+    @property
     def get_local_repos(self):
         """Show list of currently available local repositories.
         Each repository is returned as in "show" API
@@ -246,6 +247,7 @@ class Aptly(object):
         )
 
 
+    @property
     def get_dirs(self):
         """List all directories"""
         return self._call(
@@ -311,6 +313,7 @@ class Aptly(object):
         )
 
 
+    @property
     def get_publish(self):
         """List published repositories"""
         return self._call(
@@ -519,6 +522,7 @@ class Aptly(object):
         )
 
 
+    @property
     def aptly_version(self):
         """Return current aptly version"""
         return self._call(
