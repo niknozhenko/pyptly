@@ -14,5 +14,5 @@ Description: A Python wrapper around the Aptly API
 
 Package: python3-pyptly
 Architecture: all
-Depends: ${python3:Depends}, python-requests (>= 2.4.3)
+Depends: ${python3:Depends}, python3-requests (>= 2.4.3)
 Description: A Python wrapper around the Aptly API
